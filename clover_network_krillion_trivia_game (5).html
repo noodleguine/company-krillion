@@ -1,0 +1,3050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clover Krillion — Clover Network, Inc. (A Fiserv Company)</title>
+  <!-- Tailwind CSS via CDN for sleek, responsive styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PeerJS via CDN for zero-backend cross-device WebRTC Room Code multiplayer -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <!-- MQTT.js via CDN for firewall-friendly Secure WebSocket (WSS) cross-device relay -->
+  <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Inter for crisp Clover fintech typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --clover-green: #43B02A;
+      --clover-dark: #18221B;
+      --fiserv-orange: #FF6600;
+    }
+
+    body {
+      font-family: var(--font-body);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #FFFFFF;
+      color: #18221B;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+    }
+
+    /* Lively Gentle Movement Animations */
+    @keyframes floatBob {
+      0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    @keyframes hardwareHover {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-5px) scale(1.04); }
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px) rotate(-2deg); }
+      40% { transform: translateX(8px) rotate(2deg); }
+      60% { transform: translateX(-6px) rotate(-1deg); }
+      80% { transform: translateX(6px) rotate(1deg); }
+    }
+
+    @keyframes unlockPop {
+      0% { transform: translateY(10px) scale(0.92); opacity: 0.4; }
+      50% { transform: translateY(-10px) scale(1.06); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.94) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .animate-bob {
+      animation: floatBob 3.6s ease-in-out infinite;
+    }
+
+    .animate-hw {
+      animation: hardwareHover 3.2s ease-in-out infinite;
+    }
+
+    .animate-shake {
+      animation: shakeError 0.42s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    .animate-dive {
+      animation: unlockPop 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .animate-pop {
+      animation: popIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Tactile Clover POS Buttons */
+    .btn-game {
+      transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 0 rgba(24, 34, 27, 0.18), 0 8px 18px rgba(67, 176, 42, 0.18);
+    }
+    .btn-game:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.04);
+    }
+    .btn-game:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(24, 34, 27, 0.18), 0 3px 8px rgba(67, 176, 42, 0.15);
+    }
+
+    /* Crisp White & Mint Clover Cards */
+    .clover-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid #D5E8DA;
+      box-shadow: 0 16px 40px rgba(24, 34, 27, 0.07), 0 2px 6px rgba(67, 176, 42, 0.06);
+    }
+
+    /* Custom Scrollbar for White Clover Theme */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F0F7F2;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #A7D7B5;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #43B02A;
+    }
+
+    /* Input focus ring */
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #43B02A !important;
+      box-shadow: 0 0 0 3px rgba(67, 176, 42, 0.22);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-[#43B02A] selection:text-white">
+
+  <!-- Full-Screen Dynamic Clover Canvas (Drifting Four-Leaf Clovers, Soft Mint Ripples, Floating Hardware Silhouettes) -->
+  <canvas id="cloverCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- Subtle White-to-Mint Ambient Gradient Overlay -->
+  <div id="depthOverlay" class="fixed inset-0 pointer-events-none z-0 transition-colors duration-1000"
+       style="background: radial-gradient(circle at 50% 0%, rgba(67, 176, 42, 0.08), rgba(244, 250, 246, 0.82) 75%, rgba(255, 255, 255, 0.95) 100%);"></div>
+
+  <!-- Toast Notification Banner (Replaces alert() cleanly) -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+  <div id="app" class="relative z-10 min-h-screen flex flex-col justify-between p-3 sm:p-5 max-w-6xl mx-auto">
+
+    <!-- Top Navigation / Clover & Fiserv Header -->
+    <header class="flex flex-wrap items-center justify-between gap-3 py-2.5 px-4 rounded-2xl clover-card">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="App.confirmReturnHome()">
+        <div id="headerMascotBadge" class="w-11 h-11 rounded-xl bg-[#EAF7EC] flex items-center justify-center shadow-sm border border-[#BFE3C6] animate-bob">
+          <!-- Stylized Clover Leaf Emblem injected by JS -->
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span id="headerCompanyTag" class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EAF7EC] text-[#287A18] border border-[#BFE3C6]">
+              CLOVER NETWORK, INC.
+            </span>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFF2E8] text-[#D95300] border border-[#FFD1B3]">
+              A Fiserv Company
+            </span>
+            <span id="headerRoomBadge" class="hidden text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#18221B] text-white border border-[#43B02A]">
+              ROOM: <span id="headerRoomCodeText">------</span>
+            </span>
+            <span id="liveSyncBadge" class="hidden text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-[#43B02A] animate-ping"></span> LIVE SYNC
+            </span>
+          </div>
+          <h1 id="headerGameTitle" class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#18221B] leading-tight mt-0.5">
+            CLOVER KRILLION
+          </h1>
+        </div>
+      </div>
+
+      <!-- Right Header Controls: Score Readout + Audio Toggle + Customize Button -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Live Points Pill (Visible during gameplay) -->
+        <div id="headerDepthPill" class="hidden items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#F4FAF6] border border-[#BFE3C6]">
+          <span class="text-xs text-[#287A18] font-bold uppercase">Score</span>
+          <span id="headerDepthValue" class="font-display font-extrabold text-lg text-[#18221B]">0 pts</span>
+        </div>
+
+        <!-- Sound Toggle -->
+        <button id="soundToggleBtn" onclick="SoundEngine.toggle()" title="Toggle POS Chime Audio"
+                class="p-2.5 rounded-xl bg-[#F4FAF6] hover:bg-[#E4F3E8] border border-[#CBE6D1] text-[#18221B] transition">
+          <span id="soundIcon">🔊</span>
+        </button>
+
+        <!-- Customize Studio Button -->
+        <button onclick="Customizer.open()"
+                class="btn-game px-3.5 py-2 rounded-xl bg-[#43B02A] hover:bg-[#389922] text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 border border-[#328A1E]">
+          <span>🎨</span>
+          <span class="hidden sm:inline">Customize & Export</span>
+          <span class="sm:hidden">Edit</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Dynamic Screen Container -->
+    <main id="screenContainer" class="flex-1 flex flex-col justify-center my-4">
+      <!-- Screens are rendered dynamically here by App.render() -->
+    </main>
+
+    <!-- Footer Clover Hardware Rarity Scale -->
+    <footer class="py-2.5 px-4 rounded-2xl clover-card flex flex-wrap items-center justify-between gap-2 text-xs text-[#37473C]">
+      <div class="flex items-center gap-2">
+        <span class="font-extrabold text-[#287A18]">Clover Rarity Ladder:</span>
+        <span class="hidden lg:inline text-[#526658]">Rarer valid answers unlock higher-tier Clover hardware!</span>
+      </div>
+      <div id="footerTierPills" class="flex flex-wrap items-center gap-1.5">
+        <!-- Populated dynamically from GAME_CONFIG.rarityTiers -->
+      </div>
+    </footer>
+  </div>
+
+  <!-- =====================================================================
+       CUSTOMIZATION STUDIO & GITHUB PAGES EXPORT MODAL
+       ===================================================================== -->
+  <div id="customizerModal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 bg-[#18221B]/60 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-5xl max-h-[92vh] rounded-3xl flex flex-col overflow-hidden border-2 border-[#BFE3C6] shadow-2xl animate-pop">
+      <!-- Modal Header -->
+      <div class="px-5 py-4 bg-[#F4FAF6] border-b border-[#D5E8DA] flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-[#18221B] flex items-center gap-2">
+            <span>🍀</span> Clover Krillion Studio
+          </h2>
+          <p class="text-xs text-[#4A5D50]">Swap placeholder hardware SVGs with custom PNGs/emojis, edit all 14 questions, and export a standalone <code class="text-[#287A18] font-bold">index.html</code> for GitHub Pages.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="Customizer.exportStaticHTML()"
+                  class="btn-game px-4 py-2 rounded-xl bg-[#43B02A] text-white font-bold text-xs sm:text-sm flex items-center gap-1.5">
+            <span>⬇️</span> Download GitHub Pages HTML
+          </button>
+          <button onclick="Customizer.close()"
+                  class="p-2 rounded-xl bg-white hover:bg-[#E4F3E8] border border-[#CBE6D1] text-[#18221B] font-bold text-sm">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Studio Tabs -->
+      <div class="flex border-b border-[#D5E8DA] bg-white px-4 gap-2 overflow-x-auto">
+        <button onclick="Customizer.switchTab('branding')" id="tabBtn-branding"
+                class="studio-tab px-4 py-3 text-sm font-bold border-b-2 border-[#43B02A] text-[#287A18] whitespace-nowrap">
+          1. Branding & Theme
+        </button>
+        <button onclick="Customizer.switchTab('assets')" id="tabBtn-assets"
+                class="studio-tab px-4 py-3 text-sm font-bold border-b-2 border-transparent text-[#5A6E60] hover:text-[#18221B] whitespace-nowrap">
+          2. Clover Hardware Assets & Mascot
+        </button>
+        <button onclick="Customizer.switchTab('questions')" id="tabBtn-questions"
+                class="studio-tab px-4 py-3 text-sm font-bold border-b-2 border-transparent text-[#5A6E60] hover:text-[#18221B] whitespace-nowrap">
+          3. Questions & Rarity Lists (2×7)
+        </button>
+        <button onclick="Customizer.switchTab('github')" id="tabBtn-github"
+                class="studio-tab px-4 py-3 text-sm font-bold border-b-2 border-transparent text-[#5A6E60] hover:text-[#18221B] whitespace-nowrap">
+          4. GitHub Pages & Live Host Guide
+        </button>
+      </div>
+
+      <!-- Modal Scrollable Content -->
+      <div id="customizerBody" class="p-5 overflow-y-auto flex-1 space-y-6 bg-[#FAFCFA]">
+        <!-- Populated dynamically by Customizer -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-5 py-3.5 bg-[#F4FAF6] border-t border-[#D5E8DA] flex flex-wrap items-center justify-between gap-3">
+        <button onclick="Customizer.resetToDefaults()"
+                class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold">
+          Reset to Clover Default Template
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="Customizer.saveAndApply()"
+                  class="btn-game px-5 py-2.5 rounded-xl bg-[#43B02A] text-white font-bold text-sm">
+            Save & Apply to Game
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       CONFIRMATION DIALOG (Replaces window.confirm cleanly)
+       ===================================================================== -->
+  <div id="confirmModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[#18221B]/60 backdrop-blur-sm">
+    <div class="bg-white max-w-md w-full rounded-3xl p-6 border-2 border-[#BFE3C6] shadow-2xl animate-pop text-center space-y-4">
+      <div class="text-4xl">🍀</div>
+      <h3 id="confirmTitle" class="text-xl font-extrabold text-[#18221B]">Return to Main Menu?</h3>
+      <p id="confirmMessage" class="text-sm text-[#4A5D50]">Current game progress will be reset if you leave now.</p>
+      <div class="flex justify-center gap-3 pt-2">
+        <button onclick="App.closeConfirm()" class="px-4 py-2.5 rounded-xl bg-[#F0F7F2] hover:bg-[#E1EFE5] text-[#18221B] font-bold text-sm border border-[#CBE6D1]">
+          Keep Playing
+        </button>
+        <button id="confirmProceedBtn" class="btn-game px-5 py-2.5 rounded-xl bg-[#FF6600] text-white font-bold text-sm">
+          Exit to Menu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 0. CRISP VECTOR SVG PLACEHOLDER GRAPHICS FOR CLOVER HARDWARE & MASCOT
+    // =========================================================================
+    const CLOVER_SVGS = {
+      cloverMark: `
+        <svg viewBox="0 0 64 64" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 30C32 21 24 12 16 12C10.5 12 7 16 7 21C7 27 14 32 30 32" fill="#43B02A"/>
+          <path d="M32 30C32 21 40 12 48 12C53.5 12 57 16 57 21C57 27 50 32 34 32" fill="#54C938"/>
+          <path d="M32 34C32 43 24 52 16 52C10.5 52 7 48 7 43C7 37 14 32 30 32" fill="#359420"/>
+          <path d="M32 34C32 43 40 52 48 52C53.5 52 57 48 57 43C57 37 50 32 34 32" fill="#43B02A"/>
+          <circle cx="32" cy="32" r="4" fill="#FFFFFF"/>
+        </svg>
+      `,
+      cloverMascot: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="24" r="13" fill="#43B02A"/>
+          <circle cx="52" cy="24" r="13" fill="#56CC3B"/>
+          <circle cx="28" cy="46" r="13" fill="#369620"/>
+          <circle cx="52" cy="46" r="13" fill="#43B02A"/>
+          <circle cx="40" cy="35" r="16" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <circle cx="34.5" cy="33" r="2.3" fill="#18221B"/>
+          <circle cx="45.5" cy="33" r="2.3" fill="#18221B"/>
+          <path d="M34 39.5C36 42.5 44 42.5 46 39.5" stroke="#43B02A" stroke-width="2.8" stroke-linecap="round"/>
+          <circle cx="62" cy="16" r="5" fill="#FF6600"/>
+          <path d="M38 56L35 70H45L42 56" fill="#2E8B57"/>
+        </svg>
+      `,
+      clover_go: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="34" fill="#EAF7EC"/>
+          <rect x="23" y="18" width="34" height="44" rx="8" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <rect x="29" y="15" width="22" height="4" rx="2" fill="#43B02A"/>
+          <path d="M36 39C38.5 36.5 41.5 36.5 44 39" stroke="#43B02A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32.5 35.5C36.8 31.2 43.2 31.2 47.5 35.5" stroke="#43B02A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M29 32C35.2 25.8 44.8 25.8 51 32" stroke="#43B02A" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="33" cy="52" r="2" fill="#43B02A"/>
+          <circle cx="40" cy="52" r="2" fill="#43B02A"/>
+          <circle cx="47" cy="52" r="2" fill="#A7D7B5"/>
+        </svg>
+      `,
+      clover_mini: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="34" fill="#E3F5E7"/>
+          <path d="M28 62H52L48 52H32L28 62Z" fill="#CBD5E1" stroke="#18221B" stroke-width="2.2" stroke-linejoin="round"/>
+          <rect x="16" y="20" width="48" height="33" rx="6" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <rect x="20" y="24" width="40" height="25" rx="3" fill="#18221B"/>
+          <circle cx="32" cy="36" r="5" fill="#43B02A"/>
+          <rect x="41" y="32" width="14" height="3" rx="1.5" fill="#FFFFFF"/>
+          <rect x="41" y="38" width="10" height="3" rx="1.5" fill="#43B02A"/>
+        </svg>
+      `,
+      clover_flex: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="34" fill="#DCF2E1"/>
+          <rect x="30" y="10" width="20" height="9" rx="1.5" fill="#FFFFFF" stroke="#18221B" stroke-width="2"/>
+          <line x1="33" y1="14" x2="47" y2="14" stroke="#94A3B8" stroke-width="1.5"/>
+          <rect x="25" y="17" width="30" height="50" rx="7" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <path d="M25 27H55" stroke="#43B02A" stroke-width="3.5"/>
+          <rect x="29" y="31" width="22" height="28" rx="3" fill="#18221B"/>
+          <circle cx="40" cy="43" r="5" fill="#43B02A"/>
+          <rect x="34" y="51" width="12" height="2.5" rx="1.2" fill="#FFFFFF"/>
+        </svg>
+      `,
+      clover_station_duo: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="34" fill="#D2EED9"/>
+          <path d="M22 63H46L42 51H26L22 63Z" fill="#94A3B8" stroke="#18221B" stroke-width="2.2" stroke-linejoin="round"/>
+          <rect x="11" y="19" width="42" height="31" rx="5" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <rect x="15" y="23" width="34" height="23" rx="2.5" fill="#18221B"/>
+          <rect x="19" y="27" width="14" height="15" rx="2" fill="#43B02A"/>
+          <rect x="36" y="28" width="9" height="3" rx="1.5" fill="#FFFFFF"/>
+          <rect x="36" y="34" width="9" height="3" rx="1.5" fill="#A7D7B5"/>
+          <rect x="46" y="36" width="23" height="25" rx="4" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <rect x="49" y="39" width="17" height="17" rx="2" fill="#43B02A"/>
+          <path d="M54 48L57 51L62 45" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `,
+      clover_kiosk: `
+        <svg viewBox="0 0 80 80" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="35" fill="#FFF3E6" stroke="#FF6600" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <rect x="24" y="65" width="32" height="5" rx="2.5" fill="#18221B"/>
+          <rect x="34" y="53" width="12" height="13" fill="#CBD5E1" stroke="#18221B" stroke-width="2.2"/>
+          <rect x="22" y="10" width="36" height="45" rx="6" fill="#FFFFFF" stroke="#18221B" stroke-width="2.5"/>
+          <rect x="27" y="13" width="26" height="3.5" rx="1.7" fill="#43B02A"/>
+          <rect x="26" y="19" width="28" height="30" rx="3" fill="#18221B"/>
+          <circle cx="40" cy="31" r="6" fill="#43B02A"/>
+          <rect x="31" y="40" width="18" height="4" rx="2" fill="#FF6600"/>
+          <rect x="58" y="32" width="5" height="13" rx="2" fill="#43B02A" stroke="#18221B" stroke-width="1.8"/>
+        </svg>
+      `
+    };
+
+    // =========================================================================
+    // 1. MASTER GAME CONFIGURATION (Clover Network, Inc. • A Fiserv Company)
+    // =========================================================================
+    const DEFAULT_GAME_CONFIG = {
+      companyName: "CLOVER NETWORK, INC.",
+      parentCompany: "A Fiserv Company",
+      gameTitle: "CLOVER KRILLION",
+      tagline: "Think beyond the obvious! Avoid common picks and unlock the rarest Clover hardware.",
+      secondsPerQuestion: 25,
+      themePreset: "clover-mint",
+      mascot: {
+        name: "Lucky Clover",
+        type: "svg",
+        value: "cloverMascot"
+      },
+      rarityTiers: [
+        {
+          id: "clover_go",
+          legacyTier: "Plankton",
+          name: "Clover Go",
+          shortName: "Clover Go",
+          points: 1,
+          color: "#43B02A",
+          badgeBg: "bg-[#EAF7EC] text-[#287A18] border-[#BFE3C6]",
+          assetType: "svg",
+          assetValue: "clover_go",
+          flavor: "Popular pick! Pocket-sized Clover Go unlocked."
+        },
+        {
+          id: "clover_mini",
+          legacyTier: "Schooler",
+          name: "Clover Mini",
+          shortName: "Clover Mini",
+          points: 3,
+          color: "#2E8B57",
+          badgeBg: "bg-[#DCF2E3] text-[#1F633D] border-[#A7D9B8]",
+          assetType: "svg",
+          assetValue: "clover_mini",
+          flavor: "Nice countertop move! Clover Mini unlocked."
+        },
+        {
+          id: "clover_flex",
+          legacyTier: "Rare",
+          name: "Clover Flex",
+          shortName: "Clover Flex",
+          points: 6,
+          color: "#0D9488",
+          badgeBg: "bg-teal-50 text-teal-800 border-teal-300",
+          assetType: "svg",
+          assetValue: "clover_flex",
+          flavor: "Flexible thinking! Handheld Clover Flex unlocked."
+        },
+        {
+          id: "clover_station_duo",
+          legacyTier: "Deep Cut",
+          name: "Clover Station Duo",
+          shortName: "Station Duo",
+          points: 10,
+          color: "#15803D",
+          badgeBg: "bg-emerald-100 text-emerald-900 border-emerald-400",
+          assetType: "svg",
+          assetValue: "clover_station_duo",
+          flavor: "Deep cut! Dual-screen Clover Station Duo unlocked!"
+        },
+        {
+          id: "clover_kiosk",
+          legacyTier: "One in a Krillion",
+          name: "Clover Kiosk",
+          shortName: "Clover Kiosk",
+          points: 15,
+          color: "#FF6600",
+          badgeBg: "bg-[#FFF2E8] text-[#C2410C] border-[#FFBA8A]",
+          assetType: "svg",
+          assetValue: "clover_kiosk",
+          flavor: "ONE IN A KRILLION! Self-service Clover Kiosk unlocked!"
+        }
+      ],
+      rounds: [
+        {
+          roundNumber: 1,
+          title: "Round 1: Merchant Life & Clover Classics",
+          subtitle: "Warm up your POS skills — skip the obvious answer to reach Clover Kiosk!",
+          questions: [
+            {
+              id: "r1q1",
+              prompt: "Name a type of small business where you'd spot a Clover terminal on the counter.",
+              hint: "Skip 'coffee shop' if you want to unlock Station Duo or Kiosk!",
+              answers: {
+                clover_go: [
+                  { label: "Coffee Shop / Café", aliases: ["coffee shop", "cafe", "coffee", "espresso bar", "bakery"] },
+                  { label: "Restaurant / Diner", aliases: ["restaurant", "diner", "bistro", "eatery"] },
+                  { label: "Retail / Clothing Boutique", aliases: ["retail", "clothing store", "boutique", "shop", "store"] }
+                ],
+                clover_mini: [
+                  { label: "Food Truck", aliases: ["food truck", "taco truck", "street food"] },
+                  { label: "Hair Salon / Barbershop", aliases: ["salon", "hair salon", "barbershop", "barber", "nail salon"] },
+                  { label: "Pizza Parlor", aliases: ["pizza", "pizzeria", "pizza shop"] }
+                ],
+                clover_flex: [
+                  { label: "Farmers Market Stand", aliases: ["farmers market", "market", "pop up", "popup shop"] },
+                  { label: "Brewery / Taproom / Bar", aliases: ["brewery", "bar", "pub", "taproom", "winery"] },
+                  { label: "Ice Cream / Boba Shop", aliases: ["ice cream", "boba", "bubble tea", "gelato", "frozen yogurt"] }
+                ],
+                clover_station_duo: [
+                  { label: "Pet Groomer / Vet Clinic", aliases: ["pet groomer", "pet store", "vet", "dog groomer", "veterinarian"] },
+                  { label: "Florist / Plant Nursery", aliases: ["florist", "flower shop", "plant shop", "nursery"] },
+                  { label: "Auto Repair / Car Wash", aliases: ["auto repair", "mechanic", "car wash", "tire shop"] }
+                ],
+                clover_kiosk: [
+                  { label: "Bowling Alley / Arcade", aliases: ["bowling", "bowling alley", "arcade", "mini golf"] },
+                  { label: "Comic Book / Board Game Store", aliases: ["comic shop", "comic book store", "game store", "record store"] },
+                  { label: "Golf Pro Shop / Marina", aliases: ["golf course", "pro shop", "marina", "surf shop"] }
+                ]
+              }
+            },
+            {
+              id: "r1q2",
+              prompt: "Name a way customers pay at checkout today.",
+              hint: "Think beyond physical credit cards and cash!",
+              answers: {
+                clover_go: [
+                  { label: "Credit / Debit Card (Chip/Swipe)", aliases: ["credit card", "debit card", "card", "chip", "swipe", "visa", "mastercard"] },
+                  { label: "Cash", aliases: ["cash", "bills", "coins", "paper money"] }
+                ],
+                clover_mini: [
+                  { label: "Apple Pay", aliases: ["apple pay", "iphone", "apple watch"] },
+                  { label: "Google Pay / Samsung Pay", aliases: ["google pay", "samsung pay", "android pay"] },
+                  { label: "Tap to Pay (Contactless NFC)", aliases: ["tap", "tap to pay", "contactless", "nfc"] }
+                ],
+                clover_flex: [
+                  { label: "Physical or Digital Gift Card", aliases: ["gift card", "gift cards", "egift card", "store credit"] },
+                  { label: "QR Code Scan-to-Pay", aliases: ["qr code", "qr", "scan to pay"] }
+                ],
+                clover_station_duo: [
+                  { label: "Loyalty Points / Rewards Redemption", aliases: ["loyalty", "loyalty points", "rewards", "points"] },
+                  { label: "Buy Now, Pay Later (BNPL)", aliases: ["bnpl", "buy now pay later", "klarna", "affirm", "afterpay"] }
+                ],
+                clover_kiosk: [
+                  { label: "Pay-by-Link / Text Invoice", aliases: ["invoice", "pay by link", "text to pay", "online invoice"] },
+                  { label: "Smart Ring / Wearable", aliases: ["smart ring", "wearable", "garmin pay", "fitbit pay"] }
+                ]
+              }
+            },
+            {
+              id: "r1q3",
+              prompt: "Name something you always find in an office breakroom.",
+              hint: "What keeps Clover & Fiserv teams fueled?",
+              answers: {
+                clover_go: [
+                  { label: "Coffee / Espresso Machine", aliases: ["coffee", "coffee maker", "espresso", "keurig", "mugs"] },
+                  { label: "Microwave", aliases: ["microwave"] },
+                  { label: "Refrigerator", aliases: ["fridge", "refrigerator"] }
+                ],
+                clover_mini: [
+                  { label: "Sparkling Water / Water Dispenser", aliases: ["water", "sparkling water", "la croix", "water cooler"] },
+                  { label: "Tea Bags / Electric Kettle", aliases: ["tea", "kettle", "green tea"] },
+                  { label: "Snacks / Granola Bars", aliases: ["snacks", "granola bars", "chips", "trail mix"] }
+                ],
+                clover_flex: [
+                  { label: "Abandoned Tupperware", aliases: ["tupperware", "leftovers", "containers"] },
+                  { label: "Oat Milk / Almond Milk", aliases: ["oat milk", "almond milk", "creamer"] }
+                ],
+                clover_station_duo: [
+                  { label: "Leftover Team Celebration Cake/Donuts", aliases: ["cake", "donuts", "cupcakes", "bagels"] },
+                  { label: "Sticky Note on the Fridge", aliases: ["sticky note", "note", "sign"] }
+                ],
+                clover_kiosk: [
+                  { label: "Unclaimed Clover Branded Swag Mug", aliases: ["swag", "clover mug", "company mug", "water bottle"] },
+                  { label: "Mystery Hot Sauce Collection", aliases: ["hot sauce", "sriracha", "ketchup packets", "soy sauce"] }
+                ]
+              }
+            },
+            {
+              id: "r1q4",
+              prompt: "Name a famous lucky charm or symbol of good fortune.",
+              hint: "Besides a four-leaf clover, of course!",
+              answers: {
+                clover_go: [
+                  { label: "Four-Leaf Clover", aliases: ["four leaf clover", "4 leaf clover", "clover", "shamrock"] },
+                  { label: "Horseshoe", aliases: ["horseshoe"] },
+                  { label: "Rabbit's Foot", aliases: ["rabbits foot", "rabbit foot"] }
+                ],
+                clover_mini: [
+                  { label: "Shooting Star", aliases: ["shooting star", "falling star", "wish upon a star"] },
+                  { label: "Ladybug", aliases: ["ladybug", "ladybird"] },
+                  { label: "Wishbone", aliases: ["wishbone", "turkey wishbone"] }
+                ],
+                clover_flex: [
+                  { label: "Lucky Penny (Heads Up)", aliases: ["lucky penny", "penny", "coin"] },
+                  { label: "Maneki-Neko (Beckoning Cat)", aliases: ["lucky cat", "maneki neko", "beckoning cat", "cat"] }
+                ],
+                clover_station_duo: [
+                  { label: "Evil Eye Charm", aliases: ["evil eye", "nazar"] },
+                  { label: "Acorn", aliases: ["acorn", "oak"] }
+                ],
+                clover_kiosk: [
+                  { label: "Cricket on the Hearth", aliases: ["cricket"] },
+                  { label: "Jade Pi Disc", aliases: ["jade", "jade charm"] }
+                ]
+              }
+            },
+            {
+              id: "r1q5",
+              prompt: "Name something that helps a team collaborate smoothly in hybrid work.",
+              hint: "Tools, habits, or rituals!",
+              answers: {
+                clover_go: [
+                  { label: "Video Call / Zoom / Teams", aliases: ["zoom", "teams", "video call", "video chat", "google meet"] },
+                  { label: "Slack / Chat Messaging", aliases: ["slack", "chat", "messaging", "instant message"] },
+                  { label: "Email", aliases: ["email", "emails"] }
+                ],
+                clover_mini: [
+                  { label: "Calendar Invite / Agenda", aliases: ["calendar", "agenda", "invite", "outlook"] },
+                  { label: "Shared Doc / Google Doc / Wiki", aliases: ["google doc", "shared doc", "doc", "wiki", "notion", "confluence"] }
+                ],
+                clover_flex: [
+                  { label: "Digital Whiteboard / Miro", aliases: ["whiteboard", "miro", "figjam", "brainstorm"] },
+                  { label: "Screen Share", aliases: ["screen share", "screenshare", "presenting"] }
+                ],
+                clover_station_duo: [
+                  { label: "Async Loom / Video Update", aliases: ["loom", "async", "recorded video", "update"] },
+                  { label: "Emoji Reaction", aliases: ["emoji", "reaction", "thumbs up"] }
+                ],
+                clover_kiosk: [
+                  { label: "Virtual Coffee Chat", aliases: ["coffee chat", "virtual coffee", "watercooler"] },
+                  { label: "Team Hype Playlist", aliases: ["playlist", "music", "hype"] }
+                ]
+              }
+            },
+            {
+              id: "r1q6",
+              prompt: "Name something you see on a restaurant receipt or order ticket.",
+              hint: "Totals, tips, modifiers, or kitchen notes!",
+              answers: {
+                clover_go: [
+                  { label: "Total Price", aliases: ["total", "price", "amount", "subtotal"] },
+                  { label: "Tip Line", aliases: ["tip", "tips", "gratuity"] },
+                  { label: "Tax", aliases: ["tax", "sales tax"] }
+                ],
+                clover_mini: [
+                  { label: "Itemized Food / Drinks", aliases: ["items", "itemized", "food", "drinks", "order"] },
+                  { label: "Date & Time", aliases: ["date", "time", "timestamp"] }
+                ],
+                clover_flex: [
+                  { label: "Special Instructions / Modifiers", aliases: ["no onions", "extra sauce", "modifier", "modifiers", "special instructions", "note"] },
+                  { label: "Table Number / Server Name", aliases: ["table", "table number", "server", "waiter"] }
+                ],
+                clover_station_duo: [
+                  { label: "QR Code for Survey / Loyalty", aliases: ["qr", "survey", "feedback"] },
+                  { label: "Discount / Promo Code", aliases: ["discount", "promo", "coupon"] }
+                ],
+                clover_kiosk: [
+                  { label: "Allergy Warning", aliases: ["allergy", "allergen", "gluten free", "nut allergy"] },
+                  { label: "Thank You Message", aliases: ["thank you", "thanks", "have a nice day"] }
+                ]
+              }
+            },
+            {
+              id: "r1q7",
+              prompt: "Name an outdoor spot where people gather on a sunny weekend.",
+              hint: "Parks, patios, boardwalks, or courts!",
+              answers: {
+                clover_go: [
+                  { label: "Park", aliases: ["park", "public park", "lawn"] },
+                  { label: "Beach", aliases: ["beach", "boardwalk", "coast", "sand"] },
+                  { label: "Outdoor Patio / Café", aliases: ["patio", "outdoor patio", "rooftop", "deck"] }
+                ],
+                clover_mini: [
+                  { label: "Farmers Market", aliases: ["farmers market", "market"] },
+                  { label: "Hiking Trail / Nature Trail", aliases: ["trail", "hiking", "hike", "woods"] }
+                ],
+                clover_flex: [
+                  { label: "Picnic Blanket in the Grass", aliases: ["picnic", "blanket", "grass"] },
+                  { label: "Community Garden", aliases: ["garden", "community garden"] }
+                ],
+                clover_station_duo: [
+                  { label: "Pickleball / Tennis Court", aliases: ["pickleball", "tennis", "basketball court", "court"] },
+                  { label: "Food Truck Festival", aliases: ["festival", "food truck", "street fair"] }
+                ],
+                clover_kiosk: [
+                  { label: "Botanical Conservatory", aliases: ["botanical", "conservatory", "arboretum", "greenhouse"] },
+                  { label: "Outdoor Amphitheater", aliases: ["amphitheater", "concert in the park", "bandstand"] }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          roundNumber: 2,
+          title: "Round 2: Fiserv Ecosystem, Speed & Deep Cuts",
+          subtitle: "Double the excitement — hunt for clever, deep-cut answers to score huge!",
+          questions: [
+            {
+              id: "r2q1",
+              prompt: "Name a perk or feature merchants love about an all-in-one POS system.",
+              hint: "Speed, inventory, reporting, or reliability!",
+              answers: {
+                clover_go: [
+                  { label: "Fast Checkout / Speed", aliases: ["fast", "speed", "quick checkout", "fast checkout"] },
+                  { label: "Sales Reports / Analytics", aliases: ["reports", "analytics", "sales", "reporting"] },
+                  { label: "Inventory Tracking", aliases: ["inventory", "stock", "tracking"] }
+                ],
+                clover_mini: [
+                  { label: "Employee Management / Shifts", aliases: ["employees", "staff", "shifts", "time clock"] },
+                  { label: "Digital & Printed Receipts", aliases: ["receipts", "receipt", "email receipt"] }
+                ],
+                clover_flex: [
+                  { label: "Table / Floor Management", aliases: ["tables", "floor plan", "table management"] },
+                  { label: "Custom Menus & Modifiers", aliases: ["menu", "menus", "modifiers"] }
+                ],
+                clover_station_duo: [
+                  { label: "Customer Profiles & Loyalty", aliases: ["customers", "loyalty", "crm"] },
+                  { label: "Multi-Location Sync", aliases: ["multi location", "locations", "branches"] }
+                ],
+                clover_kiosk: [
+                  { label: "Offline Mode Resilience", aliases: ["offline", "offline mode", "no internet"] },
+                  { label: "App Market Integrations", aliases: ["app market", "apps", "integrations"] }
+                ]
+              }
+            },
+            {
+              id: "r2q2",
+              prompt: "Name something associated with speed or moving super fast.",
+              hint: "From checkout lanes to lightning bolts!",
+              answers: {
+                clover_go: [
+                  { label: "Cheetah", aliases: ["cheetah"] },
+                  { label: "Lightning / Bolt", aliases: ["lightning", "bolt", "thunderbolt"] },
+                  { label: "Race Car / Sports Car", aliases: ["race car", "sports car", "formula 1", "f1"] }
+                ],
+                clover_mini: [
+                  { label: "Bullet Train / High-Speed Rail", aliases: ["bullet train", "train", "high speed train"] },
+                  { label: "Rocket / Jet", aliases: ["rocket", "jet", "fighter jet", "airplane"] }
+                ],
+                clover_flex: [
+                  { label: "Falcon / Peregrine Falcon", aliases: ["falcon", "peregrine falcon", "hawk", "eagle"] },
+                  { label: "Speedboat / Jet Ski", aliases: ["speedboat", "jet ski", "boat"] }
+                ],
+                clover_station_duo: [
+                  { label: "Express Lane", aliases: ["express lane", "fast lane", "express"] },
+                  { label: "Blink of an Eye", aliases: ["blink", "blink of an eye", "flash"] }
+                ],
+                clover_kiosk: [
+                  { label: "Supersonic Sonic Boom", aliases: ["sonic boom", "supersonic", "mach"] },
+                  { label: "Hummingbird Wingbeat", aliases: ["hummingbird"] }
+                ]
+              }
+            },
+            {
+              id: "r2q3",
+              prompt: "Name a word or phrase that means 'rare' or 'one in a million'.",
+              hint: "Channel your inner 'One in a Krillion'!",
+              answers: {
+                clover_go: [
+                  { label: "Rare", aliases: ["rare", "super rare"] },
+                  { label: "One in a Million", aliases: ["one in a million", "1 in a million"] },
+                  { label: "Unique", aliases: ["unique", "one of a kind"] }
+                ],
+                clover_mini: [
+                  { label: "Unicorn", aliases: ["unicorn"] },
+                  { label: "Needle in a Haystack", aliases: ["needle in a haystack", "haystack"] }
+                ],
+                clover_flex: [
+                  { label: "Collector's Edition / Limited Edition", aliases: ["limited edition", "collectors edition", "limited"] },
+                  { label: "Rarest Gem / Diamond", aliases: ["diamond", "gem", "rare gem"] }
+                ],
+                clover_station_duo: [
+                  { label: "Halley's Comet", aliases: ["comet", "halleys comet", "eclipse"] },
+                  { label: "Four-Leaf Find", aliases: ["four leaf", "lucky find"] }
+                ],
+                clover_kiosk: [
+                  { label: "One in a Krillion", aliases: ["one in a krillion", "krillion", "1 in a krillion"] },
+                  { label: "Blue Moon", aliases: ["blue moon", "once in a blue moon"] }
+                ]
+              }
+            },
+            {
+              id: "r2q4",
+              prompt: "Name something you pack for a company off-site or conference.",
+              hint: "Badges, chargers, notebooks, and travel gear!",
+              answers: {
+                clover_go: [
+                  { label: "Laptop & Charger", aliases: ["laptop", "charger", "power cord", "computer"] },
+                  { label: "Badge / Lanyard", aliases: ["badge", "lanyard", "name tag"] },
+                  { label: "Notebook & Pen", aliases: ["notebook", "pen", "pens", "notepad"] }
+                ],
+                clover_mini: [
+                  { label: "Backpack / Messenger Bag", aliases: ["backpack", "bag", "rucksack"] },
+                  { label: "Reusable Water Bottle", aliases: ["water bottle", "bottle", "hydroflask", "stanley"] }
+                ],
+                clover_flex: [
+                  { label: "Portable Power Bank", aliases: ["power bank", "battery pack", "portable charger"] },
+                  { label: "Comfortable Walking Shoes", aliases: ["shoes", "sneakers", "walking shoes"] }
+                ],
+                clover_station_duo: [
+                  { label: "Business Cards / QR Card", aliases: ["business cards", "business card", "qr card"] },
+                  { label: "Travel Umbrella / Hoodie", aliases: ["umbrella", "hoodie", "sweater", "jacket"] }
+                ],
+                clover_kiosk: [
+                  { label: "Extra HDMI / Adapter Dongle", aliases: ["adapter", "dongle", "hdmi", "usb hub"] },
+                  { label: "Mint / Breath Mints", aliases: ["mints", "breath mints", "tic tac"] }
+                ]
+              }
+            },
+            {
+              id: "r2q5",
+              prompt: "Name a way to celebrate a big team win or milestone.",
+              hint: "High fives, shoutouts, treats, or team outings!",
+              answers: {
+                clover_go: [
+                  { label: "Team Lunch / Dinner", aliases: ["lunch", "dinner", "team lunch", "pizza party"] },
+                  { label: "High Five / Fist Bump", aliases: ["high five", "fist bump", "high fives"] },
+                  { label: "Shoutout / Applause", aliases: ["shoutout", "applause", "clap", "cheers"] }
+                ],
+                clover_mini: [
+                  { label: "Coffee / Ice Cream Treat", aliases: ["ice cream", "treat", "coffee run"] },
+                  { label: "Kudos in Slack / Channel", aliases: ["kudos", "slack shoutout", "recognition"] }
+                ],
+                clover_flex: [
+                  { label: "Confetti Cannon / Poppers", aliases: ["confetti", "party popper", "celebration"] },
+                  { label: "Happy Hour / Mocktail Toast", aliases: ["happy hour", "toast", "mocktail"] }
+                ],
+                clover_station_duo: [
+                  { label: "Trophy / Winner Badge", aliases: ["trophy", "medal", "award"] },
+                  { label: "Victory Dance", aliases: ["victory dance", "dance"] }
+                ],
+                clover_kiosk: [
+                  { label: "Ring the Gong / Bell", aliases: ["gong", "bell", "ring the bell"] },
+                  { label: "Custom Team Sticker Drop", aliases: ["sticker", "stickers"] }
+                ]
+              }
+            },
+            {
+              id: "r2q6",
+              prompt: "Name something green in nature or everyday life.",
+              hint: "Keep it green like Clover!",
+              answers: {
+                clover_go: [
+                  { label: "Grass / Lawn", aliases: ["grass", "lawn", "turf"] },
+                  { label: "Tree / Leaves", aliases: ["tree", "trees", "leaf", "leaves"] },
+                  { label: "Clover / Shamrock", aliases: ["clover", "shamrock", "four leaf clover"] }
+                ],
+                clover_mini: [
+                  { label: "Emerald", aliases: ["emerald", "emerald gem"] },
+                  { label: "Avocado / Guacamole", aliases: ["avocado", "guacamole", "lime"] }
+                ],
+                clover_flex: [
+                  { label: "Matcha Tea", aliases: ["matcha", "green tea"] },
+                  { label: "Moss / Fern", aliases: ["moss", "fern"] }
+                ],
+                clover_station_duo: [
+                  { label: "Pistachio", aliases: ["pistachio"] },
+                  { label: "Traffic 'Go' Light", aliases: ["green light", "traffic light"] }
+                ],
+                clover_kiosk: [
+                  { label: "Aurora Borealis (Green)", aliases: ["aurora", "northern lights"] },
+                  { label: "Jade Plant", aliases: ["jade plant", "succulent"] }
+                ]
+              }
+            },
+            {
+              id: "r2q7",
+              prompt: "Final Krillion Question! Name something you hope never runs out mid-shift.",
+              hint: "Battery, Wi-Fi, patience, or receipt paper!",
+              answers: {
+                clover_go: [
+                  { label: "Battery / Charge", aliases: ["battery", "charge", "power"] },
+                  { label: "Wi-Fi / Internet", aliases: ["wifi", "wi fi", "internet", "connection"] },
+                  { label: "Patience", aliases: ["patience", "calm"] }
+                ],
+                clover_mini: [
+                  { label: "Receipt Paper Roll", aliases: ["receipt paper", "paper", "paper roll", "thermal paper"] },
+                  { label: "Coffee", aliases: ["coffee", "caffeine"] }
+                ],
+                clover_flex: [
+                  { label: "Good Vibes / Energy", aliases: ["good vibes", "vibes", "energy", "morale"] },
+                  { label: "Inventory / Stock", aliases: ["inventory", "stock", "supplies"] }
+                ],
+                clover_station_duo: [
+                  { label: "Smile / Friendly Service", aliases: ["smile", "smiles", "hospitality"] },
+                  { label: "Backup Plan", aliases: ["backup", "backup plan"] }
+                ],
+                clover_kiosk: [
+                  { label: "Krillion Luck", aliases: ["luck", "krillion luck", "four leaf luck"] },
+                  { label: "Napkins at the Counter", aliases: ["napkins", "napkin"] }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    let GAME_CONFIG = JSON.parse(JSON.stringify(DEFAULT_GAME_CONFIG));
+    try {
+      const savedConfigRaw = localStorage.getItem("clover_krillion_custom_config_v1");
+      if (savedConfigRaw) {
+        const parsed = JSON.parse(savedConfigRaw);
+        if (parsed && Array.isArray(parsed.rounds) && parsed.rounds.length === 2 && Array.isArray(parsed.rarityTiers)) {
+          GAME_CONFIG = parsed;
+        }
+      }
+    } catch (e) {}
+
+    // =========================================================================
+    // 2. WEB AUDIO SOUND ENGINE (Zero External MP3 Dependencies)
+    // =========================================================================
+    const SoundEngine = {
+      ctx: null,
+      muted: false,
+
+      ensureCtx() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume().catch(() => {});
+        }
+      },
+
+      toggle() {
+        this.muted = !this.muted;
+        const icon = document.getElementById("soundIcon");
+        if (icon) icon.textContent = this.muted ? "🔇" : "🔊";
+      },
+
+      playTone(freq, duration = 0.14, type = "sine", gainVal = 0.12, delay = 0) {
+        if (this.muted) return;
+        try {
+          this.ensureCtx();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime + delay;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(gainVal, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch (e) {}
+      },
+
+      playTap() {
+        this.playTone(540, 0.08, "triangle", 0.09);
+      },
+
+      playChimeStart() {
+        this.playTone(523.25, 0.14, "sine", 0.12, 0);
+        this.playTone(659.25, 0.14, "sine", 0.12, 0.09);
+        this.playTone(783.99, 0.24, "sine", 0.14, 0.18);
+      },
+
+      playUnlock(tierIndex = 0) {
+        const base = 440 + tierIndex * 95;
+        this.playTone(base, 0.14, "triangle", 0.14, 0);
+        this.playTone(base * 1.25, 0.22, "sine", 0.16, 0.1);
+      },
+
+      playMiss() {
+        this.playTone(230, 0.14, "sawtooth", 0.07, 0);
+        this.playTone(190, 0.18, "sawtooth", 0.07, 0.1);
+      }
+    };
+
+    // =========================================================================
+    // 3. DYNAMIC CLOVER CANVAS (Drifting Four-Leaf Clovers & Mint Ripples)
+    // =========================================================================
+    const CloverCanvas = {
+      canvas: null,
+      ctx: null,
+      clovers: [],
+      particles: [],
+
+      init() {
+        this.canvas = document.getElementById("cloverCanvas");
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext("2d");
+        this.resize();
+        window.addEventListener("resize", () => this.resize());
+        this.clovers = Array.from({ length: 24 }, () => this.makeClover(true));
+        this.loop();
+      },
+
+      resize() {
+        if (!this.canvas) return;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      },
+
+      makeClover(randomY = false) {
+        return {
+          x: Math.random() * (this.canvas ? this.canvas.width : 1200),
+          y: randomY ? Math.random() * (this.canvas ? this.canvas.height : 800) : -30,
+          size: 12 + Math.random() * 18,
+          speedY: 0.25 + Math.random() * 0.45,
+          swayAmp: 0.4 + Math.random() * 0.8,
+          swayPhase: Math.random() * Math.PI * 2,
+          rot: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.01,
+          alpha: 0.09 + Math.random() * 0.11,
+          isOrange: Math.random() < 0.14
+        };
+      },
+
+      burstCelebration(color = "#43B02A") {
+        const cx = (this.canvas ? this.canvas.width : 800) / 2;
+        const cy = (this.canvas ? this.canvas.height : 600) / 3;
+        for (let i = 0; i < 36; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 2 + Math.random() * 6;
+          this.particles.push({
+            x: cx,
+            y: cy,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 2,
+            size: 6 + Math.random() * 8,
+            life: 1,
+            color: i % 3 === 0 ? "#FF6600" : color
+          });
+        }
+      },
+
+      drawFourLeaf(ctx, size, color, alpha) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color;
+        const r = size * 0.34;
+        const offset = size * 0.28;
+        for (let i = 0; i < 4; i++) {
+          ctx.rotate(Math.PI / 2);
+          ctx.beginPath();
+          ctx.arc(offset, offset, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      },
+
+      loop() {
+        if (!this.ctx || !this.canvas) return;
+        const { width, height } = this.canvas;
+        this.ctx.clearRect(0, 0, width, height);
+
+        for (let c of this.clovers) {
+          c.y += c.speedY;
+          c.swayPhase += 0.015;
+          c.x += Math.sin(c.swayPhase) * c.swayAmp;
+          c.rot += c.rotSpeed;
+
+          if (c.y > height + 40) {
+            Object.assign(c, this.makeClover(false));
+          }
+
+          this.ctx.save();
+          this.ctx.translate(c.x, c.y);
+          this.ctx.rotate(c.rot);
+          this.drawFourLeaf(this.ctx, c.size, c.isOrange ? "#FF6600" : "#43B02A", c.alpha);
+          this.ctx.restore();
+        }
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.15;
+          p.life -= 0.018;
+          if (p.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.drawFourLeaf(this.ctx, p.size, p.color, p.life);
+          this.ctx.restore();
+        }
+
+        requestAnimationFrame(() => this.loop());
+      }
+    };
+
+    // =========================================================================
+    // 4. FLEXIBLE FUZZY, PARTIAL & TYPO ANSWER MATCHER
+    // =========================================================================
+    const AnswerMatcher = {
+      normalize(str) {
+        return String(str || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9\s]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      },
+
+      levenshtein(a, b) {
+        const m = a.length;
+        const n = b.length;
+        if (m === 0) return n;
+        if (n === 0) return m;
+        const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+        for (let i = 0; i <= m; i++) dp[i][0] = i;
+        for (let j = 0; j <= n; j++) dp[0][j] = j;
+        for (let i = 1; i <= m; i++) {
+          for (let j = 1; j <= n; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            dp[i][j] = Math.min(
+              dp[i - 1][j] + 1,
+              dp[i][j - 1] + 1,
+              dp[i - 1][j - 1] + cost
+            );
+          }
+        }
+        return dp[m][n];
+      },
+
+      evaluate(rawInput, question) {
+        const clean = this.normalize(rawInput);
+        if (!clean || clean.length < 2) {
+          return { status: "MISS" };
+        }
+
+        const candidates = [];
+        GAME_CONFIG.rarityTiers.forEach((tier, tierIdx) => {
+          const list = (question.answers && question.answers[tier.id]) || [];
+          list.forEach(entry => {
+            const label = typeof entry === "string" ? entry : entry.label;
+            const aliases = (typeof entry === "object" && Array.isArray(entry.aliases)) ? entry.aliases : [];
+            const terms = [label, ...aliases];
+            terms.forEach(term => {
+              const normTerm = this.normalize(term);
+              if (normTerm) {
+                candidates.push({ label, normTerm, tier, tierIdx });
+              }
+            });
+          });
+        });
+
+        // 1. Exact match
+        for (const c of candidates) {
+          if (clean === c.normTerm) {
+            return { status: "EXACT", matchedLabel: c.label, tier: c.tier, tierIdx: c.tierIdx };
+          }
+        }
+
+        // 2. Partial substring or whole-word inclusion (e.g., "card" -> "Credit / Debit Card", "tree" -> "Tree / Leaves")
+        if (clean.length >= 3) {
+          const inputTokens = clean.split(" ").filter(t => t.length >= 3);
+          for (const c of candidates) {
+            const termTokens = c.normTerm.split(" ");
+            if (
+              c.normTerm.includes(clean) ||
+              clean.includes(c.normTerm) ||
+              inputTokens.some(tok => termTokens.includes(tok))
+            ) {
+              return { status: "PARTIAL", matchedLabel: c.label, tier: c.tier, tierIdx: c.tierIdx };
+            }
+          }
+        }
+
+        // 3. Close spelling typo check ONLY (strict edit distance)
+        let bestTypo = null;
+        for (const c of candidates) {
+          const maxAllowedDist = c.normTerm.length <= 5 ? 1 : 2;
+          const dist = this.levenshtein(clean, c.normTerm);
+          if (dist > 0 && dist <= maxAllowedDist && Math.abs(clean.length - c.normTerm.length) <= 2) {
+            if (!bestTypo || dist < bestTypo.dist) {
+              bestTypo = { ...c, dist };
+            }
+          }
+          if (clean.split(" ").length === 1 && clean.length >= 4) {
+            for (const tok of c.normTerm.split(" ")) {
+              if (tok.length >= 4) {
+                const tokDist = this.levenshtein(clean, tok);
+                const tokAllowed = tok.length <= 5 ? 1 : 2;
+                if (tokDist > 0 && tokDist <= tokAllowed && Math.abs(clean.length - tok.length) <= 2) {
+                  if (!bestTypo || tokDist < bestTypo.dist) {
+                    bestTypo = { ...c, dist: tokDist };
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (bestTypo) {
+          return {
+            status: "TYPO",
+            suggestedLabel: bestTypo.label,
+            tier: bestTypo.tier,
+            tierIdx: bestTypo.tierIdx
+          };
+        }
+
+        return { status: "MISS" };
+      }
+    };
+
+    // =========================================================================
+    // 5. CROSS-DEVICE MULTIPLAYER ROOM MANAGER (MQTT-over-WSS + PeerJS + Local)
+    // =========================================================================
+    const RoomManager = {
+      bc: null,
+      mqttClient: null,
+      peer: null,
+      hostConn: null,
+      seenMsgIds: new Set(),
+      heartbeatTimer: null,
+      roomCode: "",
+      role: "NONE",
+
+      generateRoomCode() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let suffix = "";
+        for (let i = 0; i < 3; i++) {
+          suffix += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return "CLV" + suffix;
+      },
+
+      teardown() {
+        if (this.heartbeatTimer) {
+          clearInterval(this.heartbeatTimer);
+          this.heartbeatTimer = null;
+        }
+        if (this.bc) {
+          try { this.bc.close(); } catch (e) {}
+          this.bc = null;
+        }
+        if (this.mqttClient) {
+          try { this.mqttClient.end(true); } catch (e) {}
+          this.mqttClient = null;
+        }
+        if (this.peer) {
+          try { this.peer.destroy(); } catch (e) {}
+          this.peer = null;
+        }
+        this.hostConn = null;
+        this.seenMsgIds.clear();
+        this.role = "NONE";
+      },
+
+      initRoom(roomCode, role) {
+        this.teardown();
+        this.roomCode = roomCode.toUpperCase();
+        this.role = role;
+
+        if ("BroadcastChannel" in window) {
+          try {
+            this.bc = new BroadcastChannel("clover_krillion_room_" + this.roomCode);
+            this.bc.onmessage = (ev) => this.handleIncoming(ev.data);
+          } catch (e) {}
+        }
+
+        if (window.mqtt) {
+          try {
+            const topic = `clover_krillion_fiserv_live/v1/room/${this.roomCode}`;
+            this.mqttClient = window.mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
+              clientId: "clv_" + Math.random().toString(36).slice(2, 10),
+              clean: true,
+              connectTimeout: 8000,
+              reconnectPeriod: 2500
+            });
+
+            this.mqttClient.on("connect", () => {
+              App.state.netStatus = "ONLINE";
+              if (App.state.screen === "LIVE_LOBBY") App.render();
+              this.mqttClient.subscribe(topic, { qos: 0 }, () => {
+                if (this.role === "PLAYER" && App.state.joinStatus === "CONNECTING") {
+                  this.sendJoinRequest();
+                } else if (this.role === "HOST") {
+                  this.publishRoomSnapshot();
+                }
+              });
+            });
+
+            this.mqttClient.on("message", (_t, payload) => {
+              try {
+                const msg = JSON.parse(payload.toString());
+                this.handleIncoming(msg);
+              } catch (e) {}
+            });
+          } catch (e) {}
+        }
+
+        if (window.Peer) {
+          try {
+            const hostPeerId = `clover-krillion-host-${this.roomCode.toLowerCase()}`;
+            if (role === "HOST") {
+              this.peer = new window.Peer(hostPeerId, {
+                config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
+              });
+              this.peer.on("open", () => {
+                App.state.netStatus = "ONLINE";
+                if (App.state.screen === "LIVE_LOBBY") App.render();
+              });
+              this.peer.on("connection", (conn) => {
+                conn.on("data", (data) => this.handleIncoming(data));
+              });
+            } else {
+              this.peer = new window.Peer({
+                config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
+              });
+              this.peer.on("open", () => {
+                const conn = this.peer.connect(hostPeerId, { reliable: true });
+                this.hostConn = conn;
+                conn.on("open", () => this.sendJoinRequest());
+                conn.on("data", (data) => this.handleIncoming(data));
+              });
+            }
+          } catch (e) {}
+        }
+
+        this.heartbeatTimer = setInterval(() => {
+          if (this.role === "HOST") {
+            this.publishRoomSnapshot();
+          } else if (this.role === "PLAYER" && App.state.joinStatus === "CONNECTING") {
+            this.sendJoinRequest();
+          }
+        }, 2500);
+      },
+
+      broadcast(payload) {
+        const envelope = {
+          ...payload,
+          _msgId: Math.random().toString(36).slice(2) + Date.now().toString(36),
+          _roomCode: this.roomCode
+        };
+        this.seenMsgIds.add(envelope._msgId);
+
+        if (this.bc) {
+          try { this.bc.postMessage(envelope); } catch (e) {}
+        }
+        if (this.mqttClient && this.mqttClient.connected) {
+          try {
+            const topic = `clover_krillion_fiserv_live/v1/room/${this.roomCode}`;
+            this.mqttClient.publish(topic, JSON.stringify(envelope), { qos: 0 });
+          } catch (e) {}
+        }
+        if (this.hostConn && this.hostConn.open) {
+          try { this.hostConn.send(envelope); } catch (e) {}
+        }
+      },
+
+      sendJoinRequest() {
+        const me = App.state.players.find(p => p.id === App.state.localPlayerId);
+        if (!me) return;
+        this.broadcast({
+          type: "JOIN_REQ",
+          player: { id: me.id, name: me.name }
+        });
+      },
+
+      publishRoomSnapshot() {
+        if (this.role !== "HOST") return;
+        this.broadcast({
+          type: "ROOM_SNAPSHOT",
+          config: GAME_CONFIG,
+          snapshot: {
+            screen: App.state.screen,
+            roundIndex: App.state.roundIndex,
+            questionIndex: App.state.questionIndex,
+            timeLeft: App.state.timeLeft,
+            players: App.state.players,
+            lastResults: App.state.lastResults,
+            roundAnswerSummary: App.state.roundAnswerSummary
+          }
+        });
+      },
+
+      submitPlayerLock(playerId, rawInput, matchedLabel, tier) {
+        this.broadcast({
+          type: "PLAYER_LOCK",
+          playerId,
+          rawInput,
+          matchedLabel,
+          tier
+        });
+      },
+
+      handleIncoming(msg) {
+        if (!msg || !msg._msgId || msg._roomCode !== this.roomCode) return;
+        if (this.seenMsgIds.has(msg._msgId)) return;
+        this.seenMsgIds.add(msg._msgId);
+        if (this.seenMsgIds.size > 400) {
+          const first = this.seenMsgIds.values().next().value;
+          this.seenMsgIds.delete(first);
+        }
+
+        if (this.role === "HOST") {
+          if (msg.type === "JOIN_REQ" && msg.player) {
+            const exists = App.state.players.find(p => p.id === msg.player.id);
+            if (!exists) {
+              App.state.players.push({
+                id: msg.player.id,
+                name: msg.player.name,
+                score: 0,
+                locked: false,
+                rawInput: "",
+                matchedLabel: "",
+                caughtTier: null
+              });
+              SoundEngine.playTap();
+              App.showToast(`🍀 ${msg.player.name} joined the room!`);
+              if (App.state.screen === "LIVE_LOBBY" || App.state.screen === "QUESTION") {
+                App.render();
+              }
+            }
+            this.broadcast({
+              type: "JOIN_ACK",
+              targetPlayerId: msg.player.id,
+              config: GAME_CONFIG
+            });
+            this.publishRoomSnapshot();
+          } else if (msg.type === "PLAYER_LOCK") {
+            const p = App.state.players.find(pl => pl.id === msg.playerId);
+            if (p && !p.locked && App.state.screen === "QUESTION") {
+              p.locked = true;
+              p.rawInput = msg.rawInput;
+              p.matchedLabel = msg.matchedLabel;
+              p.caughtTier = msg.tier;
+              SoundEngine.playTap();
+              App.render();
+              this.publishRoomSnapshot();
+
+              if (App.state.players.length > 0 && App.state.players.every(pl => pl.locked)) {
+                setTimeout(() => {
+                  if (App.state.screen === "QUESTION") {
+                    App.finishQuestionAndShowLeaderboard();
+                  }
+                }, 900);
+              }
+            }
+          }
+        } else if (this.role === "PLAYER") {
+          if (msg.type === "JOIN_ACK" && msg.targetPlayerId === App.state.localPlayerId) {
+            if (msg.config) GAME_CONFIG = msg.config;
+            if (App.joinTimeoutHandle) {
+              clearTimeout(App.joinTimeoutHandle);
+              App.joinTimeoutHandle = null;
+            }
+            App.state.joinStatus = "CONNECTED";
+            App.state.screen = "PLAYER_WAITING";
+            SoundEngine.playUnlock(1);
+            App.render();
+          } else if (msg.type === "ROOM_SNAPSHOT" && msg.snapshot) {
+            if (msg.config) GAME_CONFIG = msg.config;
+            if (App.state.joinStatus === "CONNECTING") {
+              if (App.joinTimeoutHandle) {
+                clearTimeout(App.joinTimeoutHandle);
+                App.joinTimeoutHandle = null;
+              }
+              App.state.joinStatus = "CONNECTED";
+            }
+            App.applyHostSnapshotToPlayer(msg.snapshot);
+          }
+        }
+      }
+    };
+
+    // =========================================================================
+    // 6. MAIN APPLICATION CONTROLLER
+    // =========================================================================
+    const App = {
+      timerInterval: null,
+      joinTimeoutHandle: null,
+      pendingConfirmCallback: null,
+
+      state: {
+        screen: "HOME",
+        mode: "SOLO",
+        roomCode: "",
+        netStatus: "CONNECTING",
+        joinStatus: "IDLE",
+        joinError: "",
+        localPlayerId: "player_" + Math.random().toString(36).slice(2, 10),
+        players: [],
+        roundIndex: 0,
+        questionIndex: 0,
+        timeLeft: 25,
+        pendingTypo: null,
+        lastMissFeedback: "",
+        lastResults: [],
+        roundAnswerSummary: []
+      },
+
+      init() {
+        CloverCanvas.init();
+        this.applyBrandAndFooter();
+
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const roomParam = (params.get("room") || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          if (roomParam.length >= 4) {
+            this.state.roomCode = roomParam.slice(0, 6);
+            this.state.screen = "PLAYER_JOIN";
+          }
+        } catch (e) {}
+
+        this.render();
+      },
+
+      renderAssetMarkup(type, value, alt = "Clover Asset") {
+        if (type === "image" && value) {
+          return `<img src="${value}" alt="${this.escapeHTML(alt)}" class="w-full h-full object-contain rounded-xl" />`;
+        }
+        if (type === "emoji") {
+          return `<span class="text-2xl sm:text-3xl leading-none select-none">${this.escapeHTML(value || "🍀")}</span>`;
+        }
+        return CLOVER_SVGS[value] || CLOVER_SVGS.clover_go;
+      },
+
+      applyBrandAndFooter() {
+        const titleEl = document.getElementById("headerGameTitle");
+        const compTagEl = document.getElementById("headerCompanyTag");
+        const mascotBadge = document.getElementById("headerMascotBadge");
+        const footerPills = document.getElementById("footerTierPills");
+
+        if (titleEl) titleEl.textContent = GAME_CONFIG.gameTitle;
+        if (compTagEl) compTagEl.textContent = GAME_CONFIG.companyName;
+        if (mascotBadge) {
+          mascotBadge.innerHTML = `<div class="w-8 h-8">${this.renderAssetMarkup(GAME_CONFIG.mascot.type, GAME_CONFIG.mascot.value, GAME_CONFIG.mascot.name)}</div>`;
+        }
+
+        if (footerPills) {
+          footerPills.innerHTML = GAME_CONFIG.rarityTiers.map(t => `
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold border ${t.badgeBg}">
+              <span>${this.escapeHTML(t.shortName)}</span>
+              <span class="opacity-75">+${t.points}</span>
+            </span>
+          `).join("");
+        }
+      },
+
+      safeReplaceState(queryString) {
+        try {
+          if (window.location.protocol === "blob:" || window.location.protocol === "about:") return;
+          const url = new URL(window.location.href);
+          url.search = queryString;
+          window.history.replaceState({}, "", url.toString());
+        } catch (e) {}
+      },
+
+      buildJoinShareURL() {
+        try {
+          if (window.location.protocol === "blob:" || window.location.protocol === "about:") {
+            return `Room Code: ${this.state.roomCode}`;
+          }
+          const url = new URL(window.location.href);
+          url.searchParams.set("room", this.state.roomCode);
+          return url.toString();
+        } catch (e) {
+          return `Room Code: ${this.state.roomCode}`;
+        }
+      },
+
+      escapeHTML(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      },
+
+      showToast(message) {
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+        const el = document.createElement("div");
+        el.className = "pointer-events-auto px-4 py-3 rounded-2xl bg-[#18221B] text-white text-xs font-extrabold shadow-lg border border-[#43B02A] animate-pop";
+        el.textContent = message;
+        container.appendChild(el);
+        setTimeout(() => {
+          el.style.opacity = "0";
+          el.style.transition = "opacity 0.25s ease";
+          setTimeout(() => el.remove(), 260);
+        }, 3200);
+      },
+
+      confirmReturnHome() {
+        if (this.state.screen === "HOME") return;
+        this.pendingConfirmCallback = () => this.returnHome();
+        const modal = document.getElementById("confirmModal");
+        const proceed = document.getElementById("confirmProceedBtn");
+        if (proceed) {
+          proceed.onclick = () => {
+            const cb = this.pendingConfirmCallback;
+            this.closeConfirm();
+            if (cb) cb();
+          };
+        }
+        if (modal) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+        }
+      },
+
+      closeConfirm() {
+        this.pendingConfirmCallback = null;
+        const modal = document.getElementById("confirmModal");
+        if (modal) {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
+      },
+
+      updateHeaderBadges() {
+        const roomBadge = document.getElementById("headerRoomBadge");
+        const roomText = document.getElementById("headerRoomCodeText");
+        const liveSync = document.getElementById("liveSyncBadge");
+        const depthPill = document.getElementById("headerDepthPill");
+        const depthVal = document.getElementById("headerDepthValue");
+
+        const showRoom = this.state.roomCode && this.state.screen !== "HOME" && this.state.screen !== "PLAYER_JOIN";
+        if (roomBadge && roomText) {
+          roomBadge.classList.toggle("hidden", !showRoom);
+          roomText.textContent = this.state.roomCode;
+        }
+        if (liveSync) {
+          liveSync.classList.toggle("hidden", !(showRoom && this.state.netStatus === "ONLINE"));
+        }
+
+        if (depthPill && depthVal) {
+          if (this.state.players.length > 0 && this.state.screen !== "HOME" && this.state.screen !== "PLAYER_JOIN") {
+            depthPill.classList.remove("hidden");
+            depthPill.classList.add("flex");
+            if (this.state.mode === "LIVE_PLAYER") {
+              const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+              depthVal.textContent = `${me ? me.score : 0} pts`;
+            } else {
+              const topScore = Math.max(0, ...this.state.players.map(p => Number(p.score || 0)));
+              depthVal.textContent = `${topScore} pts`;
+            }
+          } else {
+            depthPill.classList.add("hidden");
+            depthPill.classList.remove("flex");
+          }
+        }
+      },
+
+      // HOME SCREEN (Clover Network & Fiserv Theme)
+      viewHome() {
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-10 max-w-4xl mx-auto w-full text-center animate-pop">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18] text-xs font-extrabold uppercase tracking-wider mb-3">
+              <span class="w-4 h-4 inline-block">${CLOVER_SVGS.cloverMark}</span>
+              2 Rounds • 7 Questions Each • Clover Hardware Tiers
+            </div>
+
+            <div class="my-2 flex justify-center">
+              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-[#F4FAF6] border-2 border-[#BFE3C6] p-2 shadow-sm animate-bob">
+                ${this.renderAssetMarkup(GAME_CONFIG.mascot.type, GAME_CONFIG.mascot.value, GAME_CONFIG.mascot.name)}
+              </div>
+            </div>
+
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#18221B] mt-2">
+              <span class="text-[#43B02A]">${this.escapeHTML(GAME_CONFIG.gameTitle)}</span>
+            </h2>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-[#287A18] mt-1">
+              ${this.escapeHTML(GAME_CONFIG.companyName)} • ${this.escapeHTML(GAME_CONFIG.parentCompany)}
+            </p>
+            <p class="text-sm sm:text-base text-[#4A5D50] max-w-2xl mx-auto mt-3 leading-relaxed font-medium">
+              ${this.escapeHTML(GAME_CONFIG.tagline)}
+            </p>
+
+            <!-- 5 Clover Hardware Rarity Cards with Custom SVG Graphics -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 my-7 text-left">
+              ${GAME_CONFIG.rarityTiers.map(t => `
+                <div class="p-3.5 rounded-2xl bg-[#F8FCF9] border border-[#D5E8DA] flex flex-col justify-between gap-2 hover:border-[#43B02A] transition shadow-xs">
+                  <div class="flex items-start justify-between gap-1">
+                    <div class="w-12 h-12 shrink-0 animate-hw">
+                      ${this.renderAssetMarkup(t.assetType, t.assetValue, t.name)}
+                    </div>
+                    <span class="text-xs font-extrabold px-2 py-0.5 rounded-full bg-white border border-[#CBE6D1] text-[#18221B]">+${t.points} pts</span>
+                  </div>
+                  <div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-[#627868]">${this.escapeHTML(t.legacyTier)}</div>
+                    <div class="font-extrabold text-xs sm:text-sm leading-tight" style="color: ${t.color}">${this.escapeHTML(t.name)}</div>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <!-- Action Buttons: Host Live Room / Join via Room Code / Solo Practice -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
+              <button onclick="App.openLiveLobby()"
+                      class="btn-game py-4 px-5 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-base flex items-center justify-center gap-2 border border-[#328A1E]">
+                <span>🍀</span>
+                <span>Host Live Room</span>
+              </button>
+
+              <button onclick="App.openJoinByCodeScreen()"
+                      class="btn-game py-4 px-5 rounded-2xl bg-[#FF6600] hover:bg-[#E55B00] text-white font-extrabold text-base flex items-center justify-center gap-2 border border-[#CC5200]">
+                <span>🔑</span>
+                <span>Join via Room Code</span>
+              </button>
+
+              <button onclick="App.startSoloGame()"
+                      class="btn-game py-4 px-5 rounded-2xl bg-[#F8FCF9] hover:bg-[#EAF7EC] text-[#18221B] font-extrabold text-base flex items-center justify-center gap-2 border-2 border-[#BFE3C6]">
+                <span>🌿</span>
+                <span>Solo Practice</span>
+              </button>
+            </div>
+
+            <div class="mt-5">
+              <button onclick="Customizer.open()" class="text-xs font-bold text-[#287A18] hover:text-[#1D5E10] underline underline-offset-4">
+                Customize questions, swap hardware graphics & export for GitHub Pages →
+              </button>
+            </div>
+          </div>
+        `;
+      },
+
+      // JOIN VIA ROOM CODE SCREEN
+      viewPlayerJoin() {
+        const prefill = this.state.roomCode || "";
+        const savedName = localStorage.getItem("clover_krillion_player_name") || "";
+        const status = this.state.joinStatus || "IDLE";
+        const err = this.state.joinError || "";
+
+        if (status === "CONNECTING") {
+          return `
+            <div class="clover-card rounded-3xl p-8 sm:p-12 max-w-md mx-auto w-full text-center animate-pop">
+              <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#EAF7EC] border-2 border-[#43B02A] p-2 animate-bounce">
+                ${CLOVER_SVGS.clover_flex}
+              </div>
+              <h2 class="text-2xl font-extrabold text-[#18221B]">Connecting to Host...</h2>
+              <p class="text-sm text-[#4A5D50] mt-2">
+                Verifying room <span class="font-mono font-extrabold text-[#287A18] px-2 py-0.5 rounded bg-[#EAF7EC]">${this.escapeHTML(prefill)}</span> across devices.
+              </p>
+              <div class="mt-5 flex items-center justify-center gap-2 text-xs font-bold text-[#627868]">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#43B02A] animate-ping"></span>
+                <span>Waiting for host acknowledgement...</span>
+              </div>
+              <button onclick="App.cancelJoinAttempt()" class="mt-6 px-4 py-2 rounded-xl bg-[#F4FAF6] hover:bg-[#E6F4EA] border border-[#CBE6D1] text-xs font-extrabold text-[#2B3A30]">
+                Cancel
+              </button>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-10 max-w-lg mx-auto w-full text-center animate-pop">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF2E8] border border-[#FFD1B3] text-[#D95300] text-xs font-extrabold uppercase tracking-wider mb-3">
+              <span>🔑</span> Play Live on Your Own Device
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#18221B]">Join a Live Clover Room</h2>
+            <p class="text-sm text-[#4A5D50] mt-1">Enter the 6-character Room Code shown on the host screen.</p>
+
+            ${err ? `
+              <div class="mt-4 p-3 rounded-2xl bg-[#FFF2F2] border border-[#FECACA] text-[#B91C1C] text-xs font-bold text-left">
+                ⚠️ ${this.escapeHTML(err)}
+              </div>
+            ` : ""}
+
+            <form onsubmit="App.submitJoinRoom(event)" class="mt-6 space-y-4 text-left">
+              <div>
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-[#526658] mb-1.5">Room Code</label>
+                <input id="joinCodeInput" type="text" maxlength="6" required value="${this.escapeHTML(prefill)}"
+                       placeholder="CLV429"
+                       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')"
+                       class="w-full px-4 py-3.5 rounded-2xl bg-[#F8FCF9] border-2 border-[#BFE3C6] text-center font-mono text-2xl font-extrabold tracking-[0.25em] text-[#18221B] uppercase" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-[#526658] mb-1.5">Your Name</label>
+                <input id="joinNameInput" type="text" maxlength="24" required value="${this.escapeHTML(savedName)}"
+                       placeholder="e.g. Jordan (Merchant Ops)"
+                       class="w-full px-4 py-3.5 rounded-2xl bg-[#F8FCF9] border-2 border-[#BFE3C6] text-base font-bold text-[#18221B]" />
+              </div>
+
+              <div class="pt-2 flex gap-3">
+                <button type="button" onclick="App.returnHome()"
+                        class="px-5 py-3.5 rounded-2xl bg-[#F4FAF6] hover:bg-[#E6F4EA] border border-[#CBE6D1] text-sm font-extrabold text-[#2B3A30]">
+                  ← Back
+                </button>
+                <button type="submit"
+                        class="btn-game flex-1 py-3.5 px-6 rounded-2xl bg-[#FF6600] hover:bg-[#E55B00] text-white font-extrabold text-base border border-[#CC5200]">
+                  Join Game →
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+      },
+
+      // PLAYER WAITING SCREEN
+      viewPlayerWaiting() {
+        const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+        return `
+          <div class="clover-card rounded-3xl p-8 sm:p-12 max-w-lg mx-auto w-full text-center animate-pop">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-[#EAF7EC] border-2 border-[#43B02A] p-2 animate-bob">
+              ${this.renderAssetMarkup(GAME_CONFIG.mascot.type, GAME_CONFIG.mascot.value, GAME_CONFIG.mascot.name)}
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18] text-xs font-extrabold uppercase tracking-wider mb-2">
+              Connected to Room ${this.escapeHTML(this.state.roomCode)}
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#18221B]">
+              You're In, ${this.escapeHTML(me ? me.name : "Player")}!
+            </h2>
+            <p class="text-sm text-[#4A5D50] mt-2">
+              See your name on the host screen? Keep this tab open—the first question will appear here automatically when the host starts!
+            </p>
+            <div class="mt-6 p-4 rounded-2xl bg-[#F8FCF9] border border-[#D5E8DA] flex items-center justify-between text-xs font-bold text-[#526658]">
+              <span>Players in Lobby: <strong class="text-[#18221B]">${this.state.players.length}</strong></span>
+              <span class="text-[#287A18]">● Ready</span>
+            </div>
+            <button onclick="App.confirmReturnHome()" class="mt-6 text-xs font-bold text-[#627868] hover:text-[#18221B] underline">
+              Leave Room
+            </button>
+          </div>
+        `;
+      },
+
+      // HOST LIVE LOBBY SCREEN
+      viewLiveLobby() {
+        const connBadge = this.state.netStatus === "ONLINE"
+          ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18] text-[11px] font-extrabold"><span class="w-2 h-2 rounded-full bg-[#43B02A]"></span> Cross-Device Relay Live</span>`
+          : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF2E8] border border-[#FFD1B3] text-[#D95300] text-[11px] font-extrabold"><span class="w-2 h-2 rounded-full bg-[#FF6600] animate-ping"></span> Connecting Relay...</span>`;
+
+        const shareUrl = this.buildJoinShareURL();
+
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-9 max-w-4xl mx-auto w-full animate-pop">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E1EFE5] pb-5">
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">🎙️ Host Live Lobby</span>
+                  ${connBadge}
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#18221B]">Join on Your Phone or Laptop</h2>
+              </div>
+              <button onclick="App.confirmReturnHome()" class="px-4 py-2 rounded-xl bg-[#F4FAF6] hover:bg-[#E6F4EA] border border-[#CBE6D1] text-xs font-extrabold text-[#2B3A30]">
+                ← Exit Lobby
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 items-start">
+              <div class="p-6 rounded-3xl bg-gradient-to-br from-[#F8FCF9] to-[#EAF7EC] border-2 border-[#43B02A] text-center">
+                <div class="text-xs font-extrabold uppercase tracking-widest text-[#287A18]">Room Code</div>
+                <div class="mt-2 font-mono text-4xl sm:text-5xl font-black tracking-[0.22em] text-[#18221B] select-all">
+                  ${this.escapeHTML(this.state.roomCode)}
+                </div>
+                <p class="text-xs text-[#4A5D50] font-semibold mt-3">
+                  Open this page on any phone or browser, click <strong>Join via Room Code</strong>, and enter <strong>${this.escapeHTML(this.state.roomCode)}</strong>.
+                </p>
+
+                <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+                  <button onclick="App.copyRoomCode()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F4FAF6] border border-[#BFE3C6] text-xs font-extrabold text-[#18221B]">
+                    📋 Copy Code
+                  </button>
+                  <button onclick="App.copyJoinLink()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F4FAF6] border border-[#BFE3C6] text-xs font-extrabold text-[#18221B]">
+                    🔗 Copy Invite Link
+                  </button>
+                </div>
+                <div class="mt-3 text-[11px] font-mono text-[#627868] truncate">${this.escapeHTML(shareUrl)}</div>
+              </div>
+
+              <div class="p-6 rounded-3xl bg-[#F8FCF9] border border-[#D5E8DA] flex flex-col justify-between min-h-[240px]">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">
+                      🍀 Connected Players (${this.state.players.length})
+                    </span>
+                    <span class="text-[11px] font-bold text-[#627868]">Everyone plays solo on their device</span>
+                  </div>
+
+                  ${this.state.players.length === 0 ? `
+                    <div class="p-6 rounded-2xl bg-white border border-dashed border-[#CBE6D1] text-center text-xs font-bold text-[#627868]">
+                      Waiting for players to join with code <span class="font-mono text-[#287A18]">${this.escapeHTML(this.state.roomCode)}</span>...
+                    </div>
+                  ` : `
+                    <div class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
+                      ${this.state.players.map(p => `
+                        <div class="px-3.5 py-2 rounded-2xl bg-white border border-[#BFE3C6] text-xs font-extrabold text-[#18221B] flex items-center gap-1.5 shadow-2xs">
+                          <span>🍀</span>
+                          <span>${this.escapeHTML(p.name)}</span>
+                        </div>
+                      `).join("")}
+                    </div>
+                  `}
+                </div>
+
+                <button onclick="App.startLiveGameFromLobby()"
+                        class="btn-game mt-5 w-full py-4 px-6 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-base border border-[#328A1E]">
+                  Start Round 1 (${this.state.players.length} Player${this.state.players.length === 1 ? "" : "s"}) →
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      // ACTIVE QUESTION SCREEN
+      viewQuestion() {
+        const round = GAME_CONFIG.rounds[this.state.roundIndex];
+        const question = round.questions[this.state.questionIndex];
+        const isHostView = this.state.mode === "LIVE_HOST";
+        const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+        const locked = me && me.locked;
+        const lockedTier = me && me.caughtTier;
+        const pct = Math.max(0, Math.min(100, (this.state.timeLeft / (GAME_CONFIG.secondsPerQuestion || 25)) * 100));
+        const lockedCount = this.state.players.filter(p => p.locked).length;
+
+        let feedbackBannerHTML = "";
+        if (!isHostView && locked && lockedTier) {
+          feedbackBannerHTML = `
+            <div class="mt-5 p-5 rounded-2xl bg-[#EAF7EC] border-2 border-[#43B02A] flex items-center justify-between gap-4 animate-dive">
+              <div class="flex items-center gap-3.5">
+                <div class="w-14 h-14 shrink-0 animate-hw">
+                  ${this.renderAssetMarkup(lockedTier.assetType, lockedTier.assetValue, lockedTier.name)}
+                </div>
+                <div>
+                  <div class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">🍀 Answer Locked In!</div>
+                  <div class="text-lg font-extrabold text-[#18221B]">"${this.escapeHTML(me.rawInput)}"</div>
+                  <div class="text-xs font-bold" style="color: ${lockedTier.color}">
+                    ${this.escapeHTML(lockedTier.name)} (${this.escapeHTML(lockedTier.legacyTier)}) • +${lockedTier.points} pts
+                  </div>
+                </div>
+              </div>
+              <span class="px-3 py-1.5 rounded-full bg-white border border-[#BFE3C6] text-xs font-extrabold text-[#287A18] shrink-0">
+                Waiting for timer...
+              </span>
+            </div>
+          `;
+        } else if (!isHostView && this.state.pendingTypo) {
+          const pt = this.state.pendingTypo;
+          feedbackBannerHTML = `
+            <div class="mt-4 p-4 rounded-2xl bg-[#FFF2E8] border-2 border-[#FF6600] flex flex-col sm:flex-row items-center justify-between gap-3 animate-pop">
+              <div class="text-sm font-bold text-[#18221B]">
+                🤔 Did you mean <span class="underline text-[#D95300] font-extrabold">"${this.escapeHTML(pt.suggestedLabel)}"</span> instead of "${this.escapeHTML(pt.originalInput)}"?
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="App.confirmLocalTypo()"
+                        class="px-4 py-2 rounded-xl bg-[#43B02A] hover:bg-[#389922] text-white text-xs font-extrabold">
+                  Yes, Send "${this.escapeHTML(pt.suggestedLabel)}"
+                </button>
+                <button type="button" onclick="App.dismissLocalTypo()"
+                        class="px-3 py-2 rounded-xl bg-white border border-[#FFD1B3] text-xs font-extrabold text-[#526658]">
+                  No, Retry
+                </button>
+              </div>
+            </div>
+          `;
+        } else if (!isHostView && this.state.lastMissFeedback) {
+          feedbackBannerHTML = `
+            <div class="mt-4 p-3.5 rounded-2xl bg-[#FFF2F2] border border-[#FECACA] text-[#B91C1C] text-xs sm:text-sm font-bold flex items-center justify-between animate-shake">
+              <span>❌ "${this.escapeHTML(this.state.lastMissFeedback)}" isn't in the Clover answer bank — try another answer!</span>
+              <span class="text-[11px] uppercase tracking-wider font-extrabold">Keep Trying</span>
+            </div>
+          `;
+        }
+
+        let inputSectionHTML = "";
+        if (isHostView) {
+          inputSectionHTML = `
+            <div class="mt-6 p-5 rounded-2xl bg-[#F8FCF9] border border-[#D5E8DA]">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">
+                  📡 Live Player Submissions (${lockedCount} / ${this.state.players.length} Locked In)
+                </span>
+                <button onclick="App.finishQuestionAndShowLeaderboard()"
+                        class="px-4 py-2 rounded-xl bg-[#FF6600] hover:bg-[#E55B00] text-white text-xs font-extrabold shadow-sm">
+                  End Timer & Reveal Results →
+                </button>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                ${this.state.players.map(p => `
+                  <div class="p-2.5 rounded-xl border ${p.locked ? 'bg-[#EAF7EC] border-[#43B02A]' : 'bg-white border-[#E1EFE5]'} flex items-center justify-between gap-2">
+                    <span class="text-xs font-extrabold text-[#18221B] truncate">${this.escapeHTML(p.name)}</span>
+                    <span class="text-[11px] font-extrabold ${p.locked ? 'text-[#287A18]' : 'text-[#84998B]'}">
+                      ${p.locked ? '✅ Locked' : 'Typing...'}
+                    </span>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        } else if (!locked) {
+          inputSectionHTML = `
+            <form onsubmit="App.handleLocalAnswerSubmit(event)" class="mt-5">
+              <label class="block text-xs font-extrabold uppercase tracking-wider text-[#526658] mb-2">
+                Type an answer that fits the prompt (aim for rarer Clover hardware tiers!):
+              </label>
+              <div class="flex flex-col sm:flex-row gap-2.5">
+                <input id="playerAnswerInput" type="text" autocomplete="off" autocorrect="off" spellcheck="false"
+                       placeholder="Type your answer and press Send..."
+                       class="flex-1 px-4 py-3.5 rounded-2xl bg-[#F8FCF9] border-2 border-[#BFE3C6] text-base font-bold text-[#18221B]" />
+                <button type="submit"
+                        class="btn-game px-7 py-3.5 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-base border border-[#328A1E] shrink-0">
+                  Lock Answer 🍀
+                </button>
+              </div>
+              <p class="text-[11px] text-[#627868] font-semibold mt-2">
+                💡 Not case-sensitive • Partial matches accepted • Keep guessing until you lock in a valid answer or time runs out!
+              </p>
+            </form>
+          `;
+        }
+
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-9 max-w-4xl mx-auto w-full animate-pop">
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18] text-xs font-extrabold">
+                  Round ${this.state.roundIndex + 1} of ${GAME_CONFIG.rounds.length} • Q${this.state.questionIndex + 1}/${round.questions.length}
+                </span>
+                <span class="hidden sm:inline text-xs font-bold text-[#627868]">${this.escapeHTML(round.title)}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold uppercase text-[#526658]">Time</span>
+                <span id="questionTimerValue" class="px-3.5 py-1 rounded-xl font-mono text-lg font-extrabold ${this.state.timeLeft <= 5 ? 'bg-[#FFF2F2] text-[#DC2626] animate-pulse' : 'bg-[#F4FAF6] text-[#18221B]'} border border-[#CBE6D1]">
+                  ${this.state.timeLeft}s
+                </span>
+              </div>
+            </div>
+
+            <div class="w-full h-2.5 rounded-full bg-[#E6F2EA] overflow-hidden mb-6">
+              <div id="questionTimerBar" class="h-full bg-gradient-to-r from-[#43B02A] to-[#FF6600] transition-all duration-700" style="width: ${pct}%"></div>
+            </div>
+
+            <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#F8FCF9] to-[#EAF7EC] border-2 border-[#BFE3C6] text-center">
+              <div class="text-xs font-extrabold uppercase tracking-widest text-[#287A18] mb-2">Clover Trivia Prompt</div>
+              <h2 class="text-2xl sm:text-4xl font-extrabold text-[#18221B] leading-tight">
+                ${this.escapeHTML(question.prompt)}
+              </h2>
+              ${question.hint ? `<p class="text-xs sm:text-sm text-[#4A5D50] font-semibold mt-2.5">💡 Hint: ${this.escapeHTML(question.hint)}</p>` : ""}
+            </div>
+
+            ${feedbackBannerHTML}
+            ${inputSectionHTML}
+          </div>
+        `;
+      },
+
+      // KAHOOT-STYLE POST-QUESTION LEADERBOARD (Personal Player Scorecard vs. Host Leaderboard & Rarity Chart)
+      viewPostQuestionLeaderboard() {
+        const round = GAME_CONFIG.rounds[this.state.roundIndex];
+        const question = round.questions[this.state.questionIndex];
+        const sortedPlayers = [...this.state.players].sort((a, b) => b.score - a.score);
+        const isLastQInRound = this.state.questionIndex + 1 >= round.questions.length;
+        const isLastRound = this.state.roundIndex + 1 >= GAME_CONFIG.rounds.length;
+        const nextBtnText = !isLastQInRound
+          ? `Next Question (Q${this.state.questionIndex + 2}) →`
+          : !isLastRound
+            ? "View Round 1 Halftime Standings →"
+            : "Reveal Final Krillion Winner 🏆";
+
+        if (this.state.mode === "LIVE_PLAYER") {
+          const myResult = this.state.lastResults.find(r => r.playerId === this.state.localPlayerId);
+          const myPlayer = sortedPlayers.find(p => p.id === this.state.localPlayerId);
+          const myRank = sortedPlayers.findIndex(p => p.id === this.state.localPlayerId) + 1;
+          const myTier = myResult && myResult.matched ? myResult.tier : null;
+
+          return `
+            <div class="clover-card rounded-3xl p-6 sm:p-10 max-w-lg mx-auto w-full text-center animate-pop">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${myTier ? 'bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18]' : 'bg-[#FFF2F2] border border-[#FECACA] text-[#B91C1C]'} text-xs font-extrabold uppercase tracking-wider mb-3">
+                <span>${myTier ? '🍀 Valid Catch!' : '⏰ Time Expired'}</span>
+              </div>
+
+              ${myTier ? `
+                <div class="my-3 flex justify-center">
+                  <div class="w-24 h-24 p-3 rounded-3xl bg-[#F8FCF9] border-2 border-[#BFE3C6] animate-bob">
+                    ${this.renderAssetMarkup(myTier.assetType, myTier.assetValue, myTier.name)}
+                  </div>
+                </div>
+                <div class="text-xs font-extrabold uppercase tracking-wider text-[#627868]">You Unlocked</div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-0.5" style="color: ${myTier.color}">
+                  ${this.escapeHTML(myTier.name)}
+                </h2>
+                <p class="text-xs font-bold text-[#526658] uppercase tracking-wider">${this.escapeHTML(myTier.legacyTier)} Tier</p>
+
+                <div class="mt-4 p-4 rounded-2xl bg-[#EAF7EC] border border-[#BFE3C6]">
+                  <div class="text-xs font-bold text-[#287A18]">Your Answer</div>
+                  <div class="text-lg font-extrabold text-[#18221B]">"${this.escapeHTML(myResult.rawInput)}"</div>
+                  <div class="text-2xl font-extrabold text-[#43B02A] mt-1">+${myResult.ptsEarned} pts</div>
+                </div>
+              ` : `
+                <div class="text-5xl my-4">😅</div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#18221B]">No Answer Locked In</h2>
+                <p class="text-sm text-[#4A5D50] mt-1">You earned <strong>+0 pts</strong> this question. Get ready for the next prompt!</p>
+              `}
+
+              <div class="mt-5 p-4 rounded-2xl bg-[#F8FCF9] border border-[#D5E8DA] flex items-center justify-between">
+                <div class="text-left">
+                  <div class="text-[11px] font-bold uppercase text-[#627868]">Your Rank</div>
+                  <div class="text-xl font-extrabold text-[#18221B]">#${myRank || "-"} of ${sortedPlayers.length}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[11px] font-bold uppercase text-[#627868]">Total Score</div>
+                  <div class="text-xl font-extrabold text-[#287A18]">${myPlayer ? myPlayer.score : 0} pts</div>
+                </div>
+              </div>
+
+              <div class="mt-5 text-xs font-extrabold uppercase tracking-wider text-[#627868]">
+                👀 Check the main host screen for the full leaderboard & rarity chart
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-9 max-w-5xl mx-auto w-full animate-pop space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E1EFE5] pb-4">
+              <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">
+                  Round ${this.state.roundIndex + 1} • Question ${this.state.questionIndex + 1} Recap
+                </span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#18221B] mt-0.5">
+                  "${this.escapeHTML(question.prompt)}"
+                </h2>
+              </div>
+
+              <button onclick="App.advanceAfterLeaderboard()"
+                      class="btn-game px-6 py-3.5 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-sm border border-[#328A1E]">
+                ${nextBtnText}
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="p-5 rounded-3xl bg-[#F8FCF9] border border-[#D5E8DA]">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#287A18] mb-3">
+                  🍀 Top Answers Caught This Question
+                </h3>
+                ${this.state.roundAnswerSummary.length === 0 ? `
+                  <div class="p-6 rounded-2xl bg-white border border-[#E1EFE5] text-center text-sm font-bold text-[#627868]">
+                    Nobody locked in a matching answer this round!
+                  </div>
+                ` : `
+                  <div class="space-y-2.5">
+                    ${this.state.roundAnswerSummary.map(ans => `
+                      <div class="p-3 rounded-2xl bg-white border border-[#CBE6D1] flex items-center justify-between gap-3 shadow-sm">
+                        <div class="flex items-center gap-3 min-w-0">
+                          <div class="w-10 h-10 shrink-0">
+                            ${this.renderAssetMarkup(ans.tier.assetType, ans.tier.assetValue, ans.tier.name)}
+                          </div>
+                          <div class="min-w-0">
+                            <div class="font-extrabold text-sm text-[#18221B] truncate">${this.escapeHTML(ans.label)}</div>
+                            <div class="text-[11px] font-bold" style="color: ${ans.tier.color}">
+                              ${this.escapeHTML(ans.tier.name)} • +${ans.points} pts
+                            </div>
+                          </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-[#EAF7EC] text-[#287A18] text-xs font-extrabold shrink-0">
+                          ${ans.count} player${ans.count === 1 ? "" : "s"}
+                        </span>
+                      </div>
+                    `).join("")}
+                  </div>
+                `}
+              </div>
+
+              <div class="p-5 rounded-3xl bg-[#F8FCF9] border border-[#D5E8DA]">
+                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#FF6600] mb-3">
+                  🏆 Top Players Leaderboard
+                </h3>
+                <div class="space-y-2.5">
+                  ${sortedPlayers.slice(0, 8).map((p, idx) => {
+                    const lastRes = this.state.lastResults.find(r => r.playerId === p.id);
+                    const gained = lastRes ? lastRes.ptsEarned : 0;
+                    return `
+                      <div class="p-3 rounded-2xl ${idx === 0 ? 'bg-gradient-to-r from-[#EAF7EC] to-[#FFF2E8] border-2 border-[#43B02A]' : 'bg-white border border-[#E1EFE5]'} flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                          <span class="w-7 h-7 rounded-xl ${idx === 0 ? 'bg-[#43B02A] text-white' : idx === 1 ? 'bg-[#FF6600] text-white' : 'bg-[#F4FAF6] text-[#18221B]'} font-extrabold text-xs flex items-center justify-center shrink-0">
+                            ${idx + 1}
+                          </span>
+                          <div class="min-w-0">
+                            <div class="font-extrabold text-sm text-[#18221B] truncate">${this.escapeHTML(p.name)}</div>
+                            <div class="text-[11px] font-semibold text-[#627868] truncate">
+                              ${lastRes && lastRes.matched ? `Caught "${this.escapeHTML(lastRes.rawInput)}" (${this.escapeHTML(lastRes.tier.shortName)})` : "No catch"}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                          <div class="font-extrabold text-sm text-[#18221B]">${p.score} pts</div>
+                          ${gained > 0 ? `<div class="text-[11px] font-extrabold text-[#43B02A]">+${gained}</div>` : ""}
+                        </div>
+                      </div>
+                    `;
+                  }).join("")}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#526658] mb-2.5">
+                🗺️ Predetermined Clover Rarity Chart (Clover Go → Clover Kiosk)
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+                ${GAME_CONFIG.rarityTiers.map(tier => {
+                  const items = (question.answers && question.answers[tier.id]) || [];
+                  return `
+                    <div class="p-3 rounded-2xl bg-[#F8FCF9] border border-[#D5E8DA] flex flex-col gap-2">
+                      <div class="flex items-center justify-between border-b border-[#E1EFE5] pb-1.5">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                          <div class="w-8 h-8 shrink-0">
+                            ${this.renderAssetMarkup(tier.assetType, tier.assetValue, tier.name)}
+                          </div>
+                          <div class="min-w-0">
+                            <div class="text-[9px] font-bold uppercase text-[#627868] leading-none">${this.escapeHTML(tier.legacyTier)}</div>
+                            <div class="font-extrabold text-xs truncate" style="color: ${tier.color}">${this.escapeHTML(tier.shortName)}</div>
+                          </div>
+                        </div>
+                        <span class="text-[11px] font-extrabold text-[#18221B] shrink-0">+${tier.points}</span>
+                      </div>
+                      <ul class="space-y-1 text-xs">
+                        ${items.map(item => {
+                          const label = typeof item === "string" ? item : item.label;
+                          const wasPicked = this.state.lastResults.some(
+                            r => r.matched && r.rawInput.toLowerCase() === label.toLowerCase()
+                          );
+                          return `
+                            <li class="px-2 py-1 rounded-lg ${wasPicked ? 'bg-[#43B02A] text-white font-extrabold shadow-sm' : 'bg-white border border-[#E6F2EA] text-[#2B3A30] font-medium'}">
+                              ${wasPicked ? "🍀 " : ""}${this.escapeHTML(label)}
+                            </li>
+                          `;
+                        }).join("")}
+                      </ul>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+      },
+
+      // ROUND 1 HALFTIME SCREEN
+      viewHalftime() {
+        const sorted = [...this.state.players].sort((a, b) => b.score - a.score);
+        const isHostOrSolo = this.state.mode !== "LIVE_PLAYER";
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-10 max-w-3xl mx-auto w-full text-center animate-pop">
+            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FFF2E8] border border-[#FFD1B3] text-[#D95300] text-xs font-extrabold uppercase tracking-wider mb-3">
+              <span>⏸️</span> Halftime • End of Round 1
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-[#18221B]">Round 1 Standings</h2>
+            <p class="text-sm text-[#4A5D50] mt-1">Get ready for Round 2 — 7 more Clover & Fiserv questions ahead!</p>
+
+            <div class="my-6 space-y-2.5 text-left max-w-xl mx-auto">
+              ${sorted.map((p, idx) => `
+                <div class="p-3.5 rounded-2xl ${idx === 0 ? 'bg-[#EAF7EC] border-2 border-[#43B02A]' : 'bg-[#F8FCF9] border border-[#D5E8DA]'} flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-xl ${idx === 0 ? 'bg-[#43B02A] text-white' : 'bg-white border border-[#CBE6D1] text-[#18221B]'} font-extrabold text-sm flex items-center justify-center">
+                      ${idx + 1}
+                    </span>
+                    <span class="font-extrabold text-base text-[#18221B]">${this.escapeHTML(p.name)}</span>
+                  </div>
+                  <span class="font-extrabold text-base text-[#287A18]">${p.score} pts</span>
+                </div>
+              `).join("")}
+            </div>
+
+            ${isHostOrSolo ? `
+              <button onclick="App.startRoundTwo()"
+                      class="btn-game px-8 py-4 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-base border border-[#328A1E]">
+                Start Round 2 →
+              </button>
+            ` : `
+              <div class="text-xs font-extrabold uppercase tracking-wider text-[#287A18]">
+                ⏳ Waiting for host to start Round 2...
+              </div>
+            `}
+          </div>
+        `;
+      },
+
+      // FINAL PODIUM SCREEN
+      viewFinal() {
+        const sorted = [...this.state.players].sort((a, b) => b.score - a.score);
+        const winner = sorted[0];
+        return `
+          <div class="clover-card rounded-3xl p-6 sm:p-10 max-w-3xl mx-auto w-full text-center animate-pop">
+            <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#EAF7EC] border border-[#BFE3C6] text-[#287A18] text-xs font-extrabold uppercase tracking-wider mb-3">
+              <span>🏆</span> Final Clover Krillion Results
+            </div>
+
+            <div class="w-24 h-24 mx-auto my-2 p-2 animate-bob">
+              ${CLOVER_SVGS.clover_kiosk}
+            </div>
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-[#18221B]">
+              ${winner ? `${this.escapeHTML(winner.name)} Wins!` : "Game Complete!"}
+            </h2>
+            ${winner ? `<p class="text-base font-extrabold text-[#43B02A] mt-1">${winner.score} Total Points</p>` : ""}
+
+            <div class="my-7 space-y-2.5 text-left max-w-xl mx-auto">
+              ${sorted.map((p, idx) => `
+                <div class="p-4 rounded-2xl ${idx === 0 ? 'bg-gradient-to-r from-[#EAF7EC] to-[#FFF2E8] border-2 border-[#43B02A]' : 'bg-[#F8FCF9] border border-[#D5E8DA]'} flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-xl ${idx === 0 ? 'bg-[#43B02A] text-white' : idx === 1 ? 'bg-[#FF6600] text-white' : 'bg-white border border-[#CBE6D1] text-[#18221B]'} font-extrabold text-sm flex items-center justify-center">
+                      ${idx === 0 ? '👑' : idx + 1}
+                    </span>
+                    <span class="font-extrabold text-base text-[#18221B]">${this.escapeHTML(p.name)}</span>
+                  </div>
+                  <span class="font-extrabold text-lg text-[#18221B]">${p.score} pts</span>
+                </div>
+              `).join("")}
+            </div>
+
+            <button onclick="App.returnHome()"
+                    class="btn-game px-8 py-4 rounded-2xl bg-[#43B02A] hover:bg-[#389922] text-white font-extrabold text-base border border-[#328A1E]">
+              Play Again / Back to Home
+            </button>
+          </div>
+        `;
+      },
+
+      // NAVIGATION, TIMER & GAMEPLAY FLOW METHODS
+      clearTimers() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+        if (this.joinTimeoutHandle) {
+          clearTimeout(this.joinTimeoutHandle);
+          this.joinTimeoutHandle = null;
+        }
+      },
+
+      returnHome() {
+        SoundEngine.playTap();
+        this.clearTimers();
+        RoomManager.teardown();
+        this.state.mode = "SOLO";
+        this.state.screen = "HOME";
+        this.state.roomCode = "";
+        this.state.joinStatus = "IDLE";
+        this.state.joinError = "";
+        this.state.players = [];
+        this.state.pendingTypo = null;
+        this.state.lastMissFeedback = "";
+        this.safeReplaceState("");
+        this.render();
+      },
+
+      openLiveLobby() {
+        SoundEngine.playTap();
+        this.clearTimers();
+        const code = RoomManager.generateRoomCode();
+        this.state.mode = "LIVE_HOST";
+        this.state.roomCode = code;
+        this.state.netStatus = "CONNECTING";
+        this.state.players = [];
+        this.state.roundIndex = 0;
+        this.state.questionIndex = 0;
+        this.state.screen = "LIVE_LOBBY";
+        this.safeReplaceState(`?room=${code}`);
+        RoomManager.initRoom(code, "HOST");
+        this.render();
+      },
+
+      openJoinByCodeScreen() {
+        SoundEngine.playTap();
+        this.clearTimers();
+        this.state.mode = "LIVE_PLAYER";
+        this.state.joinStatus = "IDLE";
+        this.state.joinError = "";
+        this.state.screen = "PLAYER_JOIN";
+        this.render();
+      },
+
+      cancelJoinAttempt() {
+        SoundEngine.playTap();
+        this.clearTimers();
+        RoomManager.teardown();
+        this.state.joinStatus = "IDLE";
+        this.state.joinError = "";
+        this.render();
+      },
+
+      submitJoinRoom(ev) {
+        if (ev) ev.preventDefault();
+        const codeInput = document.getElementById("joinCodeInput");
+        const nameInput = document.getElementById("joinNameInput");
+        const code = ((codeInput && codeInput.value) || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+        const name = ((nameInput && nameInput.value) || "").trim().slice(0, 24);
+
+        if (code.length < 4 || !name) {
+          this.state.joinError = "Please enter a valid Room Code and your name.";
+          this.render();
+          return;
+        }
+
+        try {
+          localStorage.setItem("clover_krillion_player_name", name);
+        } catch (e) {}
+
+        this.clearTimers();
+        this.state.mode = "LIVE_PLAYER";
+        this.state.roomCode = code;
+        this.state.joinStatus = "CONNECTING";
+        this.state.joinError = "";
+        this.state.players = [
+          {
+            id: this.state.localPlayerId,
+            name,
+            score: 0,
+            locked: false,
+            rawInput: "",
+            matchedLabel: "",
+            caughtTier: null
+          }
+        ];
+
+        RoomManager.initRoom(code, "PLAYER");
+        RoomManager.sendJoinRequest();
+        this.render();
+
+        this.joinTimeoutHandle = setTimeout(() => {
+          if (this.state.joinStatus === "CONNECTING") {
+            RoomManager.teardown();
+            this.state.joinStatus = "IDLE";
+            this.state.joinError = `Could not reach host for room "${code}". Make sure the host lobby is open on the main screen and check the code.`;
+            this.render();
+          }
+        }, 10000);
+      },
+
+      copyTextFallback(text, successMsg) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+          this.showToast(successMsg);
+        } catch (e) {
+          this.showToast("Copy manually: " + text);
+        }
+        ta.remove();
+      },
+
+      copyRoomCode() {
+        this.copyTextFallback(this.state.roomCode, `📋 Copied Room Code: ${this.state.roomCode}`);
+      },
+
+      copyJoinLink() {
+        this.copyTextFallback(this.buildJoinShareURL(), "🔗 Copied room invite link!");
+      },
+
+      startLiveGameFromLobby() {
+        SoundEngine.playChimeStart();
+        if (this.state.players.length === 0) {
+          this.state.players.push({
+            id: "host_demo",
+            name: "Host Preview",
+            score: 0,
+            locked: false,
+            rawInput: "",
+            matchedLabel: "",
+            caughtTier: null
+          });
+        }
+        this.state.roundIndex = 0;
+        this.state.questionIndex = 0;
+        this.beginQuestion();
+      },
+
+      startSoloGame() {
+        SoundEngine.playChimeStart();
+        this.clearTimers();
+        RoomManager.teardown();
+        this.state.mode = "SOLO";
+        this.state.roomCode = "";
+        this.state.players = [
+          {
+            id: this.state.localPlayerId,
+            name: "You",
+            score: 0,
+            locked: false,
+            rawInput: "",
+            matchedLabel: "",
+            caughtTier: null
+          }
+        ];
+        this.state.roundIndex = 0;
+        this.state.questionIndex = 0;
+        this.beginQuestion();
+      },
+
+      beginQuestion() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+
+        this.state.screen = "QUESTION";
+        this.state.timeLeft = GAME_CONFIG.secondsPerQuestion || 25;
+        this.state.pendingTypo = null;
+        this.state.lastMissFeedback = "";
+        this.state.players.forEach(p => {
+          p.locked = false;
+          p.rawInput = "";
+          p.matchedLabel = "";
+          p.caughtTier = null;
+        });
+
+        this.render();
+        if (this.state.mode === "LIVE_HOST") {
+          RoomManager.publishRoomSnapshot();
+        }
+
+        const inputEl = document.getElementById("playerAnswerInput");
+        if (inputEl && this.state.mode !== "LIVE_HOST") {
+          setTimeout(() => {
+            try { inputEl.focus(); } catch (e) {}
+          }, 80);
+        }
+
+        this.timerInterval = setInterval(() => {
+          this.state.timeLeft -= 1;
+          const tVal = document.getElementById("questionTimerValue");
+          const tBar = document.getElementById("questionTimerBar");
+          if (tVal) {
+            tVal.textContent = `${Math.max(0, this.state.timeLeft)}s`;
+          }
+          if (tBar) {
+            const pct = Math.max(0, Math.min(100, (this.state.timeLeft / (GAME_CONFIG.secondsPerQuestion || 25)) * 100));
+            tBar.style.width = `${pct}%`;
+          }
+
+          if (this.state.mode === "LIVE_HOST") {
+            RoomManager.publishRoomSnapshot();
+          }
+
+          if (this.state.timeLeft <= 0) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+            if (this.state.mode !== "LIVE_PLAYER") {
+              this.finishQuestionAndShowLeaderboard();
+            }
+          }
+        }, 1000);
+      },
+
+      handleLocalAnswerSubmit(ev) {
+        if (ev) ev.preventDefault();
+        if (this.state.screen !== "QUESTION" || this.state.mode === "LIVE_HOST") return;
+
+        const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+        if (!me || me.locked) return;
+
+        const inputEl = document.getElementById("playerAnswerInput");
+        const raw = ((inputEl && inputEl.value) || "").trim();
+        if (!raw) return;
+
+        const round = GAME_CONFIG.rounds[this.state.roundIndex];
+        const question = round.questions[this.state.questionIndex];
+        const res = AnswerMatcher.evaluate(raw, question);
+
+        if (res.status === "EXACT" || res.status === "PARTIAL") {
+          this.lockPlayerAnswer(me, raw, res.matchedLabel, res.tier, res.tierIdx);
+        } else if (res.status === "TYPO") {
+          this.state.pendingTypo = {
+            originalInput: raw,
+            suggestedLabel: res.suggestedLabel,
+            tier: res.tier,
+            tierIdx: res.tierIdx
+          };
+          this.state.lastMissFeedback = "";
+          SoundEngine.playTap();
+          this.render();
+        } else {
+          this.state.pendingTypo = null;
+          this.state.lastMissFeedback = raw;
+          SoundEngine.playMiss();
+          this.render();
+          const retryInput = document.getElementById("playerAnswerInput");
+          if (retryInput) {
+            retryInput.value = "";
+            try { retryInput.focus(); } catch (e) {}
+          }
+        }
+      },
+
+      confirmLocalTypo() {
+        const pt = this.state.pendingTypo;
+        const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+        this.state.pendingTypo = null;
+        if (!pt || !me || me.locked) return;
+        this.lockPlayerAnswer(me, pt.suggestedLabel, pt.suggestedLabel, pt.tier, pt.tierIdx);
+      },
+
+      dismissLocalTypo() {
+        SoundEngine.playTap();
+        this.state.pendingTypo = null;
+        this.render();
+        const retryInput = document.getElementById("playerAnswerInput");
+        if (retryInput) {
+          retryInput.value = "";
+          try { retryInput.focus(); } catch (e) {}
+        }
+      },
+
+      lockPlayerAnswer(player, rawInput, matchedLabel, tier, tierIdx = 0) {
+        player.locked = true;
+        player.rawInput = rawInput;
+        player.matchedLabel = matchedLabel;
+        player.caughtTier = tier;
+        this.state.lastMissFeedback = "";
+        this.state.pendingTypo = null;
+
+        SoundEngine.playUnlock(tierIdx);
+
+        if (this.state.mode === "LIVE_PLAYER") {
+          RoomManager.submitPlayerLock(player.id, rawInput, matchedLabel, tier);
+          this.render();
+        } else if (this.state.mode === "SOLO") {
+          this.finishQuestionAndShowLeaderboard();
+        }
+      },
+
+      applyHostSnapshotToPlayer(snap) {
+        if (!snap || this.state.mode !== "LIVE_PLAYER") return;
+
+        const prevScreen = this.state.screen;
+        const prevQKey = `${this.state.roundIndex}_${this.state.questionIndex}`;
+        const nextQKey = `${snap.roundIndex}_${snap.questionIndex}`;
+
+        this.state.roundIndex = snap.roundIndex;
+        this.state.questionIndex = snap.questionIndex;
+        this.state.timeLeft = snap.timeLeft;
+        this.state.lastResults = snap.lastResults || [];
+        this.state.roundAnswerSummary = snap.roundAnswerSummary || [];
+
+        if (Array.isArray(snap.players)) {
+          const me = this.state.players.find(p => p.id === this.state.localPlayerId);
+          this.state.players = snap.players.map(sp => {
+            if (sp.id === this.state.localPlayerId && me && me.locked && !sp.locked) {
+              return { ...sp, locked: me.locked, rawInput: me.rawInput, matchedLabel: me.matchedLabel, caughtTier: me.caughtTier };
+            }
+            return sp;
+          });
+        }
+
+        if (prevScreen === "QUESTION" && snap.screen === "QUESTION" && prevQKey === nextQKey) {
+          this.state.screen = snap.screen;
+          const tVal = document.getElementById("questionTimerValue");
+          const tBar = document.getElementById("questionTimerBar");
+          if (tVal) tVal.textContent = `${Math.max(0, this.state.timeLeft)}s`;
+          if (tBar) {
+            const pct = Math.max(0, Math.min(100, (this.state.timeLeft / (GAME_CONFIG.secondsPerQuestion || 25)) * 100));
+            tBar.style.width = `${pct}%`;
+          }
+          this.updateHeaderBadges();
+          return;
+        }
+
+        this.state.screen = snap.screen;
+        if (snap.screen === "QUESTION") {
+          this.state.pendingTypo = null;
+          this.state.lastMissFeedback = "";
+          SoundEngine.playChimeStart();
+        }
+        this.render();
+      },
+
+      finishQuestionAndShowLeaderboard() {
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
+
+        const results = [];
+        const answerCounts = new Map();
+
+        this.state.players.forEach(p => {
+          const matched = Boolean(p.locked && p.caughtTier);
+          const ptsEarned = matched ? Number(p.caughtTier.points || 0) : 0;
+          if (matched) {
+            p.score = Number(p.score || 0) + ptsEarned;
+          }
+          const displayLabel = p.rawInput || p.matchedLabel || "";
+          results.push({
+            playerId: p.id,
+            playerName: p.name,
+            rawInput: displayLabel,
+            matched,
+            tier: p.caughtTier,
+            ptsEarned
+          });
+
+          if (matched && p.caughtTier) {
+            const key = `${p.caughtTier.id}::${displayLabel.toLowerCase()}`;
+            if (!answerCounts.has(key)) {
+              answerCounts.set(key, {
+                label: displayLabel,
+                tier: p.caughtTier,
+                points: p.caughtTier.points,
+                count: 0
+              });
+            }
+            answerCounts.get(key).count += 1;
+          }
+        });
+
+        this.state.lastResults = results;
+        this.state.roundAnswerSummary = Array.from(answerCounts.values()).sort(
+          (a, b) => b.count - a.count || b.points - a.points
+        );
+        this.state.screen = "LEADERBOARD";
+        this.render();
+
+        if (this.state.mode === "LIVE_HOST") {
+          RoomManager.publishRoomSnapshot();
+        }
+      },
+
+      advanceAfterLeaderboard() {
+        SoundEngine.playTap();
+        const round = GAME_CONFIG.rounds[this.state.roundIndex];
+        const nextQ = this.state.questionIndex + 1;
+
+        if (nextQ < round.questions.length) {
+          this.state.questionIndex = nextQ;
+          this.beginQuestion();
+        } else if (this.state.roundIndex + 1 < GAME_CONFIG.rounds.length) {
+          this.state.screen = "HALFTIME";
+          this.render();
+          if (this.state.mode === "LIVE_HOST") {
+            RoomManager.publishRoomSnapshot();
+          }
+        } else {
+          this.state.screen = "FINAL";
+          CloverCanvas.burstCelebration("#43B02A");
+          SoundEngine.playUnlock(4);
+          this.render();
+          if (this.state.mode === "LIVE_HOST") {
+            RoomManager.publishRoomSnapshot();
+          }
+        }
+      },
+
+      startRoundTwo() {
+        SoundEngine.playChimeStart();
+        this.state.roundIndex = 1;
+        this.state.questionIndex = 0;
+        this.beginQuestion();
+      },
+
+      render() {
+        this.updateHeaderBadges();
+        const container = document.getElementById("screenContainer");
+        if (!container) return;
+
+        switch (this.state.screen) {
+          case "HOME":
+            container.innerHTML = this.viewHome();
+            break;
+          case "PLAYER_JOIN":
+            container.innerHTML = this.viewPlayerJoin();
+            break;
+          case "PLAYER_WAITING":
+            container.innerHTML = this.viewPlayerWaiting();
+            break;
+          case "LIVE_LOBBY":
+            container.innerHTML = this.viewLiveLobby();
+            break;
+          case "QUESTION":
+            container.innerHTML = this.viewQuestion();
+            break;
+          case "LEADERBOARD":
+            container.innerHTML = this.viewPostQuestionLeaderboard();
+            break;
+          case "HALFTIME":
+            container.innerHTML = this.viewHalftime();
+            break;
+          case "FINAL":
+            container.innerHTML = this.viewFinal();
+            break;
+          default:
+            container.innerHTML = this.viewHome();
+            break;
+        }
+      }
+    };
+
+    // =========================================================================
+    // 7. CUSTOMIZATION STUDIO & STATIC GITHUB PAGES EXPORTER
+    // =========================================================================
+    const Customizer = {
+      draft: null,
+      activeTab: "branding",
+
+      open() {
+        SoundEngine.playTap();
+        this.draft = JSON.parse(JSON.stringify(GAME_CONFIG));
+        this.switchTab(this.activeTab);
+        const modal = document.getElementById("customizerModal");
+        if (modal) {
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+        }
+      },
+
+      close() {
+        SoundEngine.playTap();
+        const modal = document.getElementById("customizerModal");
+        if (modal) {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
+      },
+
+      switchTab(tabName) {
+        this.activeTab = tabName;
+        document.querySelectorAll(".studio-tab").forEach(btn => {
+          btn.classList.remove("border-[#43B02A]", "text-[#287A18]");
+          btn.classList.add("border-transparent", "text-[#5A6E60]");
+        });
+        const activeBtn = document.getElementById(`tabBtn-${tabName}`);
+        if (activeBtn) {
+          activeBtn.classList.remove("border-transparent", "text-[#5A6E60]");
+          activeBtn.classList.add("border-[#43B02A]", "text-[#287A18]");
+        }
+        this.renderTabBody();
+      },
+
+      handleTierImageUpload(tierIdx, inputEl) {
+        const file = inputEl.files && inputEl.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.draft.rarityTiers[tierIdx].assetType = "image";
+          this.draft.rarityTiers[tierIdx].assetValue = e.target.result;
+          this.renderTabBody();
+        };
+        reader.readAsDataURL(file);
+      },
+
+      renderTabBody() {
+        const body = document.getElementById("customizerBody");
+        if (!body || !this.draft) return;
+
+        if (this.activeTab === "branding") {
+          body.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-white border border-[#D5E8DA]">
+              <div>
+                <label class="block text-xs font-extrabold uppercase text-[#526658] mb-1">Game Title</label>
+                <input id="custGameTitle" type="text" value="${App.escapeHTML(this.draft.gameTitle)}"
+                       class="w-full px-3 py-2 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-bold text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold uppercase text-[#526658] mb-1">Company Name</label>
+                <input id="custCompanyName" type="text" value="${App.escapeHTML(this.draft.companyName)}"
+                       class="w-full px-3 py-2 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-bold text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold uppercase text-[#526658] mb-1">Parent Company Tag</label>
+                <input id="custParentCompany" type="text" value="${App.escapeHTML(this.draft.parentCompany)}"
+                       class="w-full px-3 py-2 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-bold text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-extrabold uppercase text-[#526658] mb-1">Seconds per Question</label>
+                <input id="custTimer" type="number" min="10" max="120" value="${this.draft.secondsPerQuestion}"
+                       class="w-full px-3 py-2 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-bold text-sm" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-extrabold uppercase text-[#526658] mb-1">Tagline</label>
+                <input id="custTagline" type="text" value="${App.escapeHTML(this.draft.tagline)}"
+                       class="w-full px-3 py-2 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-semibold text-sm" />
+              </div>
+            </div>
+          `;
+        } else if (this.activeTab === "assets") {
+          body.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+              ${this.draft.rarityTiers.map((t, idx) => `
+                <div class="p-3.5 rounded-2xl bg-white border border-[#D5E8DA] space-y-2.5 text-center">
+                  <div class="w-16 h-16 mx-auto">
+                    ${App.renderAssetMarkup(t.assetType, t.assetValue, t.name)}
+                  </div>
+                  <div class="text-[10px] font-extrabold uppercase text-[#627868]">${App.escapeHTML(t.legacyTier)} (+${t.points} pts)</div>
+                  <input id="custTierName_${idx}" type="text" value="${App.escapeHTML(t.name)}"
+                         class="w-full px-2.5 py-1.5 rounded-lg bg-[#F8FCF9] border border-[#BFE3C6] font-extrabold text-xs text-center" />
+                  <label class="block cursor-pointer text-center px-2 py-1.5 rounded-lg bg-[#EAF7EC] hover:bg-[#DCF2E3] border border-[#BFE3C6] text-[11px] font-bold text-[#287A18]">
+                    ${t.assetType === "image" ? "✅ Custom PNG Set" : "🖼️ Upload PNG"}
+                    <input type="file" accept="image/*" class="hidden" onchange="Customizer.handleTierImageUpload(${idx}, this)" />
+                  </label>
+                </div>
+              `).join("")}
+            </div>
+          `;
+        } else if (this.activeTab === "questions") {
+          body.innerHTML = this.draft.rounds.map((r, rIdx) => `
+            <div class="space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E1EFE5] pb-2">
+                <h4 class="text-sm font-extrabold text-[#18221B]">Round ${rIdx + 1} Questions (${r.questions.length})</h4>
+                <input id="custRoundTitle_${rIdx}" type="text" value="${App.escapeHTML(r.title)}"
+                       class="px-3 py-1.5 rounded-lg bg-white border border-[#BFE3C6] text-xs font-bold w-72" />
+              </div>
+
+              <div class="space-y-3">
+                ${r.questions.map((q, qIdx) => `
+                  <div class="p-4 rounded-2xl bg-white border border-[#D5E8DA] space-y-2.5">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div class="sm:col-span-2">
+                        <label class="block text-[10px] font-extrabold uppercase text-[#526658]">R${rIdx + 1} Q${qIdx + 1} Prompt</label>
+                        <input id="custQPrompt_${rIdx}_${qIdx}" type="text" value="${App.escapeHTML(q.prompt)}"
+                               class="w-full px-3 py-1.5 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] font-bold text-xs" />
+                      </div>
+                      <div>
+                        <label class="block text-[10px] font-extrabold uppercase text-[#526658]">Hint</label>
+                        <input id="custQHint_${rIdx}_${qIdx}" type="text" value="${App.escapeHTML(q.hint || "")}"
+                               class="w-full px-3 py-1.5 rounded-xl bg-[#F8FCF9] border border-[#BFE3C6] text-xs" />
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                      ${this.draft.rarityTiers.map(t => {
+                        const arr = (q.answers && q.answers[t.id]) || [];
+                        const csv = arr.map(x => (typeof x === "string" ? x : x.label)).join(", ");
+                        return `
+                          <div>
+                            <label class="block text-[10px] font-extrabold truncate" style="color:${t.color}">${App.escapeHTML(t.shortName)}</label>
+                            <input id="custQAns_${rIdx}_${qIdx}_${t.id}" type="text" value="${App.escapeHTML(csv)}"
+                                   placeholder="Comma separated..."
+                                   class="w-full px-2 py-1 rounded-lg bg-[#F8FCF9] border border-[#D5E8DA] text-[11px]" />
+                          </div>
+                        `;
+                      }).join("")}
+                    </div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `).join("");
+        } else {
+          body.innerHTML = `
+            <div class="p-5 rounded-2xl bg-white border border-[#D5E8DA] space-y-3 text-xs sm:text-sm text-[#2B3A30]">
+              <h4 class="font-extrabold text-base text-[#18221B]">🚀 Hosting on GitHub Pages & Running Live Rooms</h4>
+              <ol class="list-decimal pl-5 space-y-2">
+                <li>Click <strong>Download GitHub Pages HTML</strong> in the top bar to save a standalone <code class="font-mono font-bold text-[#287A18]">index.html</code> containing all your edits.</li>
+                <li>Push <code class="font-mono font-bold">index.html</code> to a GitHub repository and enable <strong>GitHub Pages</strong> in your repo settings.</li>
+                <li>Click <strong>Host Live Room</strong> on the main screen to generate a 6-character code (e.g., <code class="font-mono font-bold">CLV429</code>), then have teammates open the link and tap <strong>Join via Room Code</strong> on their phones or laptops.</li>
+              </ol>
+            </div>
+          `;
+        }
+      },
+
+      collectDraftFromDOM() {
+        const titleEl = document.getElementById("custGameTitle");
+        const compEl = document.getElementById("custCompanyName");
+        const parentEl = document.getElementById("custParentCompany");
+        const tagEl = document.getElementById("custTagline");
+        const timerEl = document.getElementById("custTimer");
+
+        if (titleEl) this.draft.gameTitle = titleEl.value.trim() || "CLOVER KRILLION";
+        if (compEl) this.draft.companyName = compEl.value.trim() || "CLOVER NETWORK, INC.";
+        if (parentEl) this.draft.parentCompany = parentEl.value.trim() || "A Fiserv Company";
+        if (tagEl) this.draft.tagline = tagEl.value.trim() || this.draft.tagline;
+        if (timerEl) this.draft.secondsPerQuestion = Math.max(10, Math.min(120, parseInt(timerEl.value, 10) || 25));
+
+        this.draft.rarityTiers.forEach((t, idx) => {
+          const nameEl = document.getElementById(`custTierName_${idx}`);
+          if (nameEl && nameEl.value.trim()) {
+            t.name = nameEl.value.trim();
+            t.shortName = nameEl.value.trim().replace(/^Clover\s+/i, "") || t.name;
+          }
+        });
+
+        this.draft.rounds.forEach((r, rIdx) => {
+          const rTitleEl = document.getElementById(`custRoundTitle_${rIdx}`);
+          if (rTitleEl && rTitleEl.value.trim()) r.title = rTitleEl.value.trim();
+
+          r.questions.forEach((q, qIdx) => {
+            const pEl = document.getElementById(`custQPrompt_${rIdx}_${qIdx}`);
+            const hEl = document.getElementById(`custQHint_${rIdx}_${qIdx}`);
+            if (pEl && pEl.value.trim()) q.prompt = pEl.value.trim();
+            if (hEl) q.hint = hEl.value.trim();
+
+            this.draft.rarityTiers.forEach(t => {
+              const aEl = document.getElementById(`custQAns_${rIdx}_${qIdx}_${t.id}`);
+              if (aEl) {
+                const existing = Array.isArray(q.answers[t.id]) ? q.answers[t.id] : [];
+                q.answers[t.id] = aEl.value
+                  .split(",")
+                  .map(s => s.trim())
+                  .filter(Boolean)
+                  .map(label => {
+                    const found = existing.find(ex => typeof ex === "object" && ex.label.toLowerCase() === label.toLowerCase());
+                    return found || { label, aliases: [label.toLowerCase()] };
+                  });
+              }
+            });
+          });
+        });
+      },
+
+      saveAndApply() {
+        this.collectDraftFromDOM();
+        GAME_CONFIG = JSON.parse(JSON.stringify(this.draft));
+        try {
+          localStorage.setItem("clover_krillion_custom_config_v1", JSON.stringify(GAME_CONFIG));
+        } catch (e) {}
+        App.applyBrandAndFooter();
+        App.render();
+        this.close();
+        App.showToast("✅ Custom Clover questions & graphics applied!");
+      },
+
+      resetToDefaults() {
+        GAME_CONFIG = JSON.parse(JSON.stringify(DEFAULT_GAME_CONFIG));
+        try {
+          localStorage.removeItem("clover_krillion_custom_config_v1");
+        } catch (e) {}
+        this.draft = JSON.parse(JSON.stringify(GAME_CONFIG));
+        this.renderTabBody();
+        App.applyBrandAndFooter();
+        App.render();
+        App.showToast("🔄 Reset to Clover Network default template!");
+      },
+
+      exportStaticHTML() {
+        this.collectDraftFromDOM();
+        GAME_CONFIG = JSON.parse(JSON.stringify(this.draft));
+        App.applyBrandAndFooter();
+        App.render();
+
+        const serializedConfig = JSON.stringify(GAME_CONFIG, null, 2);
+        const docClone = document.documentElement.cloneNode(true);
+        const modal = docClone.querySelector("#customizerModal");
+        if (modal) {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
+
+        let htmlOut = "<!DOCTYPE html>\n" + docClone.outerHTML;
+        htmlOut = htmlOut.replace(
+          /const DEFAULT_GAME_CONFIG = \{[\s\S]*?\n    \};/,
+          `const DEFAULT_GAME_CONFIG = ${serializedConfig};`
+        );
+
+        const blob = new Blob([htmlOut], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "index.html";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        App.showToast("⬇️ Downloaded standalone index.html for GitHub Pages!");
+      }
+    };
+
+    window.addEventListener("load", () => App.init());
+  </script>
+</body>
+</html>
